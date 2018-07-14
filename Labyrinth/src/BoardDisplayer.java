@@ -1,6 +1,7 @@
 import java.awt.Graphics;
 import java.awt.Point;
 
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -52,6 +53,20 @@ public class BoardDisplayer extends JPanel implements ChangeListener{
 	public void stateChanged(ChangeEvent e) {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	
+	public static void main(String[] args){
+		
+		Board b = new Board();
+		b.tiles.add(new Tile(0,1));
+		b.tiles.add(new Tile(4,4));
+		
+		JFrame f = new JFrame();
+		f.setContentPane(new BoardDisplayer(b));
+		f.pack();
+		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		f.setVisible(true);
 	}
 	
 	
