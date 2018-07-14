@@ -1,6 +1,6 @@
 
 public class Tile {
-	public static final String[] Directions = {"Up", "Down", "Left", "Right"};
+	public static final String[] DIRECTIONS = {"Up", "Down", "Left", "Right"};
 	boolean[] unblocked_directions;
 	
 	// These are the x and y locations in the board, not on screen.
@@ -11,6 +11,8 @@ public class Tile {
 		this.x = x;
 		this.y = y;
 	}
+	
+	public 
 	
 	public static void main(String[] args){
 		
