@@ -60,6 +60,7 @@ public class BoardDisplayer extends JPanel implements ChangeListener{
 		
 		Board b = new Board();
 		b.tiles.add(new Tile(0,0));
+		b.tiles.add(new Tile(0,1));
 		b.tiles.add(new Tile(4,4));
 		
 		JFrame f = new JFrame();
