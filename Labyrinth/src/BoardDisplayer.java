@@ -37,7 +37,7 @@ public class BoardDisplayer extends JPanel implements ChangeListener{
 			int left = t.x * pixelsWide;
 			int right = left + pixelsWide;
 			// since screen y increases while going down, this is reversed.
-			int top = screenHeight - t.y * (pixelsTall + 1);
+			int top = screenHeight - (t.y + 1) * pixelsTall;
 			int bottom = top + pixelsTall;
 			Point topLeft = new Point(left,top);
 			Point bottomRight = new Point(right,bottom);
@@ -59,7 +59,7 @@ public class BoardDisplayer extends JPanel implements ChangeListener{
 	public static void main(String[] args){
 		
 		Board b = new Board();
-		//This is a comment for fun!
+		b.tiles.add(new Tile(0,0));
 		b.tiles.add(new Tile(0,1));
 		b.tiles.add(new Tile(4,4));
 		
