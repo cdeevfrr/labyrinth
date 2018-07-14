@@ -1,3 +1,4 @@
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Point;
 
@@ -15,6 +16,7 @@ public class BoardDisplayer extends JPanel implements ChangeListener{
 	public BoardDisplayer(Board board){
 		this.board = board;
 		board.add_change_listener(this);
+		this.setPreferredSize(new Dimension(600,300));
 	}
 	
 	public void paintComponent(Graphics g){
@@ -66,6 +68,9 @@ public class BoardDisplayer extends JPanel implements ChangeListener{
 		JFrame f = new JFrame();
 		f.setContentPane(new BoardDisplayer(b));
 		f.pack();
+		//center the window
+		f.setLocationRelativeTo(null);
+		//Quit the program when this frame is closed.
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f.setVisible(true);
 	}
