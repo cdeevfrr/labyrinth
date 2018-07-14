@@ -19,6 +19,8 @@ public class Board {
 	}
 	
 	//TODO make these maxes and mins actually calculate
+	// These will help the board be dynamically sized, 
+	// and it will automatically show the furthest two tiles that exist.
 	public int maxX(){
 		return 5;
 	}
