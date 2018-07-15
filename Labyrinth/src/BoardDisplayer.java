@@ -5,6 +5,7 @@ import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.HashMap;
+import java.util.ArrayList;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -66,7 +67,7 @@ public class BoardDisplayer extends JPanel implements ChangeListener, KeyListene
 	private void paintTiles(Graphics g){
 		for (Tile t : board.tiles){
 			GuiTile gt = new GuiTile(t);
-			Point[] tlBr = screenBounds(t.x, t.y);
+			Point[] tlBr = screenBounds(t.x, t.y); //Screen boundaries of this tile
 			Point topLeft = tlBr[0];
 			Point bottomRight = tlBr[1];
 			gt.paint(g,topLeft, bottomRight);
@@ -282,8 +283,11 @@ public class BoardDisplayer extends JPanel implements ChangeListener, KeyListene
 	
 	public static void main(String[] args){
 		Board b = new Board();
+		ArrayList<String> directionSet = new ArrayList<String>();
+		directionSet.add("Right");
+		directionSet.add("Up");
 		b.tiles.add(new Tile(0,0));
-		b.tiles.add(new Tile(0,1));
+		b.tiles.add(new Tile(0,1,directionSet));
 		b.tiles.add(new Tile(4,4));
 		b.tiles.add(new Tile(2,2));
 		
