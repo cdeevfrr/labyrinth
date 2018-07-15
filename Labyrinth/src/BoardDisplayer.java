@@ -17,12 +17,13 @@ public class BoardDisplayer extends JPanel implements ChangeListener, KeyListene
 	
 	private Board board;
 	private Point cursorLocation;
+	public Player currentPlayer;
 	//The current mode used to determine the meaning of keyboard events
 	private ActionMode actionMode;
 	private enum ActionMode{
 		MOVECURSOR,
 		PUSH,
-		INSERT
+		PLAYER
 	}
 	//The character used to switch cursor modes
 	private static final char MODESWITCH = ' ';
@@ -73,7 +74,7 @@ public class BoardDisplayer extends JPanel implements ChangeListener, KeyListene
 	}
 	
 	public void paintCharacters(Graphics g){
-		for (Player c : board.characters){
+		for (Player c : board.players){
 			GuiPlayer gc = new GuiPlayer(c);
 			Point[] tlBr = screenBounds(c.x, c.y);
 			Point topLeft = tlBr[0];
@@ -92,7 +93,7 @@ public class BoardDisplayer extends JPanel implements ChangeListener, KeyListene
 		case MOVECURSOR:
 			g.setColor(Color.black);
 			break;
-		case INSERT:
+		case PLAYER:
 			g.setColor(Color.blue);
 			break;
 		case PUSH:
@@ -161,9 +162,9 @@ public class BoardDisplayer extends JPanel implements ChangeListener, KeyListene
 				actionMode = ActionMode.PUSH;
 				break;
 			case PUSH:
-				actionMode = ActionMode.INSERT;
+				actionMode = ActionMode.PLAYER;
 				break;
-			case INSERT:
+			case PLAYER:
 				actionMode = ActionMode.MOVECURSOR;
 				break;
 			}
@@ -204,8 +205,12 @@ public class BoardDisplayer extends JPanel implements ChangeListener, KeyListene
 	 */
 	private boolean push(char c){
 		int direction = keyBindings.getOrDefault(c, -1);
-		board.push(board.tileAt(cursorLocation), direction);
-		return true;
+		Tile t = board.tileAt(cursorLocation);
+		if (t != null){
+			board.push(t, direction);
+			return true;
+		}
+		return false;
 	}
 	
 	/**
@@ -218,6 +223,27 @@ public class BoardDisplayer extends JPanel implements ChangeListener, KeyListene
 	 */
 	private Tile insert(char c){
 		return null;
+	}
+	
+	/**
+	 * Move the player in the direction specified by character c,
+	 * or else do nothing.
+	 * @param c
+	 * @return
+	 */
+	private boolean movePlayer(char c){
+		if(currentPlayer == null){
+			getFirstPlayer();
+		}
+		int direction = keyBindings.getOrDefault(c, -1);
+		if(direction != -1){
+			return board.movePlayer(currentPlayer, direction);
+		}
+		return false;
+	}
+	
+	public void getFirstPlayer(){
+		currentPlayer = board.getFirstPlayer();
 	}
 
 	@Override
@@ -241,8 +267,8 @@ public class BoardDisplayer extends JPanel implements ChangeListener, KeyListene
 					moveCursor(c);
 				}
 				break;
-			case INSERT:
-				insert(c);
+			case PLAYER:
+				movePlayer(c);
 				break;
 			}
 		}
@@ -261,7 +287,7 @@ public class BoardDisplayer extends JPanel implements ChangeListener, KeyListene
 		b.tiles.add(new Tile(4,4));
 		b.tiles.add(new Tile(2,2));
 		
-		b.characters.add(new Player(2,2,Color.green));
+		b.players.add(new Player(2,2,Color.green));
 		
 		JFrame f = new JFrame();
 		f.setContentPane(new BoardDisplayer(b));
