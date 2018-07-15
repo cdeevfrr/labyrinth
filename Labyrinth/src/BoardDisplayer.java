@@ -24,8 +24,10 @@ public class BoardDisplayer extends JPanel implements ChangeListener, KeyListene
 		PUSH,
 		INSERT
 	}
+	//The character used to switch cursor modes
 	private static final char MODESWITCH = ' ';
 	
+	//The characters used to go to different directions
 	public static final Object[][] bindingsArray = new Object[][] {
 		{'w', Tile.direction("Up") },
 		{'s', Tile.direction("Down") },
@@ -33,6 +35,7 @@ public class BoardDisplayer extends JPanel implements ChangeListener, KeyListene
 		{'d', Tile.direction("Right") },
 	};
 	
+	//Turn the bindingsArray in to a hash for easy access.
 	public static HashMap<Character, Integer> keyBindings = new HashMap<Character, Integer>();
 	static{
 		for (Object[] pair : bindingsArray){
@@ -84,6 +87,7 @@ public class BoardDisplayer extends JPanel implements ChangeListener, KeyListene
 		Point bottomRight = tlBr[1];
 		int width = bottomRight.x - topLeft.x;
 		int height = bottomRight.y - topLeft.y;
+		//Set the color of the cursor based on the current actionMode
 		switch(actionMode){
 		case MOVECURSOR:
 			g.setColor(Color.black);
@@ -129,6 +133,13 @@ public class BoardDisplayer extends JPanel implements ChangeListener, KeyListene
 		int top = screenHeight - (y + 1) * pixelsTall;
 		int bottom = top + pixelsTall;
 		return new Point[] {new Point(left, top), new Point(right, bottom)};
+	}
+	
+	public boolean isInBoard(Point p){
+		return p.x <= board.maxX() 
+				&& p.x >= board.minX()
+				&& p.y <= board.maxY()
+				&& p.y >= board.minY();
 	}
 	
 	/**
@@ -178,16 +189,11 @@ public class BoardDisplayer extends JPanel implements ChangeListener, KeyListene
 		}
 	}
 	
-	public boolean isInBoard(Point p){
-		return p.x <= board.maxX() 
-				&& p.x >= board.minX()
-				&& p.y <= board.maxY()
-				&& p.y >= board.minY();
-	}
-	
 	/**
 	 * Push the tile under the cursor in the direction specified by character c
 	 * Return the tile returned by push.
+	 * 
+	 * TODO implement this
 	 * @param e
 	 */
 	private Tile push(char c){
@@ -199,6 +205,8 @@ public class BoardDisplayer extends JPanel implements ChangeListener, KeyListene
 	 * Insert the held tile into the current location 
 	 * in the direction specified by c.
 	 * Return the tile returned by insert.
+	 * 
+	 * TODO implement this
 	 * @param c
 	 */
 	private Tile insert(char c){
@@ -237,7 +245,6 @@ public class BoardDisplayer extends JPanel implements ChangeListener, KeyListene
 	@Override
 	public void keyReleased(KeyEvent e) {
 	}
-	
 	
 	public static void main(String[] args){
 		Board b = new Board();
