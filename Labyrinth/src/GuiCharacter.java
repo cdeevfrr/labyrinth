@@ -4,8 +4,8 @@ import java.awt.Point;
 
 
 public class GuiCharacter {
-	public Character character;
-	public GuiCharacter(Character c){
+	public Player character;
+	public GuiCharacter(Player c){
 		this.character = c;
 	}
 	
