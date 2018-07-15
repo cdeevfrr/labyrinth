@@ -184,9 +184,7 @@ public class BoardDisplayer extends JPanel implements ChangeListener, KeyListene
 
 	@Override
 	public void stateChanged(ChangeEvent e) {
-		// TODO Make it so that the board is repainted
-		// whenever this is called
-		
+		this.repaint();
 	}
 	
 	@Override
