@@ -24,6 +24,7 @@ public class BoardDisplayer extends JPanel implements ChangeListener, KeyListene
 		PUSH,
 		INSERT
 	}
+	private static final char MODESWITCH = ' ';
 	
 	public static final Object[][] bindingsArray = new Object[][] {
 		{'w', Tile.direction("Up") },
@@ -83,7 +84,17 @@ public class BoardDisplayer extends JPanel implements ChangeListener, KeyListene
 		Point bottomRight = tlBr[1];
 		int width = bottomRight.x - topLeft.x;
 		int height = bottomRight.y - topLeft.y;
-		g.setColor(Color.black);
+		switch(actionMode){
+		case MOVECURSOR:
+			g.setColor(Color.black);
+			break;
+		case INSERT:
+			g.setColor(Color.blue);
+			break;
+		case PUSH:
+			g.setColor(Color.GRAY);
+			break;
+		}
 		g.drawRect(topLeft.x, topLeft.y, width, height);
 	}
 	
@@ -128,8 +139,20 @@ public class BoardDisplayer extends JPanel implements ChangeListener, KeyListene
 	 * @return
 	 */
 	private boolean modeSwitch(char c){
-		if (c == '\n'){
-			System.out.println("Switching mode");
+		if (c == MODESWITCH){
+			switch(actionMode){
+			case MOVECURSOR:
+				actionMode = ActionMode.PUSH;
+				break;
+			case PUSH:
+				actionMode = ActionMode.INSERT;
+				break;
+			case INSERT:
+				actionMode = ActionMode.MOVECURSOR;
+				break;
+			}
+			System.out.println(actionMode);
+			repaint();
 		}
 		return false;
 	}
@@ -198,10 +221,13 @@ public class BoardDisplayer extends JPanel implements ChangeListener, KeyListene
 			switch(actionMode){
 			case MOVECURSOR:
 				moveCursor(c);
+				break;
 			case PUSH:
 				push(c);
+				break;
 			case INSERT:
 				insert(c);
+				break;
 			}
 		}
 	}
