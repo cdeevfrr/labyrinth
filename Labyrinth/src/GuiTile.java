@@ -14,13 +14,13 @@ public class GuiTile{
 		this.tile = t;
 	}
 	
-	public void paint(Graphics g, Point topLeftPoint, Point bottomRightPoint){
-		int width = bottomRightPoint.x - topLeftPoint.x;
-		int height = bottomRightPoint.y - topLeftPoint.y;
+	public void paint(Graphics g, Point topLeft, Point bottomRight){
+		int width = bottomRight.x - topLeft.x;
+		int height = bottomRight.y - topLeft.y;
 		g.setColor(Color.CYAN);
 		g.drawRect(
-				topLeftPoint.x,
-				topLeftPoint.y, 
+				topLeft.x,
+				topLeft.y, 
 				width,
 				height
 				);
