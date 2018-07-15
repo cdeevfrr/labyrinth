@@ -62,10 +62,3 @@ public class GuiTile{
 		}
 	}
 }
-
-//Want to make a 3x3 rectangle, paint based on the unblocked directions of the tile.
-//Still have the same inputs to the function paint.
-//Fill center. Fill each unblocked direction.
-
-
-

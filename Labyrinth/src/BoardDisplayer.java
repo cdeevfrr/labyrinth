@@ -58,7 +58,7 @@ public class BoardDisplayer extends JPanel implements ChangeListener, KeyListene
 		this.setFocusable(true);
 	}
 	
-	public void paintComponent(Graphics g){ //component??
+	public void paintComponent(Graphics g){
 		paintTiles(g);
 		paintCharacters(g);
 		paintCursor(g);
