@@ -25,38 +25,43 @@ public class GuiTile{
 				height
 				);
 		g.setColor(Color.GRAY);
+		//third-way points on x and y axes:
+		int oneThirdAlongWidth = topLeft.x + width/3;
+		int twoThirdsAlongWidth = topLeft.x + 2 * width/3;
+		int oneThirdAlongHeight = topLeft.y + height/3;
+		int twoThirdsAlongHeight = topLeft.y + 2 * height/3;
 		//fill center:
 		g.fillRect(
-				topLeft.x + width/3,
-				topLeft.y + height/3,
+				oneThirdAlongWidth,
+				oneThirdAlongHeight,
 				width/3,
 				height/3);
 		//fill up, down, left, right:
 		if(this.tile.unblocked_directions[Tile.direction("Up")]) {
 			g.fillRect(
-					topLeft.x + width/3,
+					oneThirdAlongWidth,
 					topLeft.y, 
 					width/3,
 					height/3);
 		}
 		if(this.tile.unblocked_directions[Tile.direction("Down")]) {
 			g.fillRect(
-					topLeft.x + width/3,
-					topLeft.y + 2 * height/3, 
+					oneThirdAlongWidth,
+					twoThirdsAlongHeight,
 					width/3,
 					height/3);
 		}
 		if(this.tile.unblocked_directions[Tile.direction("Left")]) {
 			g.fillRect(
 					topLeft.x,
-					topLeft.y + height/3, 
+					oneThirdAlongHeight, 
 					width/3,
 					height/3);
 		}
 		if(this.tile.unblocked_directions[Tile.direction("Right")]) {
 			g.fillRect(
-					topLeft.x + 2 * width/3,
-					topLeft.y + height/3, 
+					twoThirdsAlongWidth,
+					oneThirdAlongHeight,
 					width/3,
 					height/3);
 		}
