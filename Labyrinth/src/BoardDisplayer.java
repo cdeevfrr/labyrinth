@@ -164,6 +164,7 @@ public class BoardDisplayer extends JPanel implements ChangeListener, KeyListene
 			}
 			System.out.println(actionMode);
 			repaint();
+			return true;
 		}
 		return false;
 	}
@@ -198,7 +199,7 @@ public class BoardDisplayer extends JPanel implements ChangeListener, KeyListene
 	 */
 	private Tile push(char c){
 		int direction = keyBindings.getOrDefault(c, -1);
-		return null;
+		return board.push(board.tileAt(cursorLocation), direction);
 	}
 	
 	/**
@@ -221,7 +222,7 @@ public class BoardDisplayer extends JPanel implements ChangeListener, KeyListene
 	@Override
 	public void keyTyped(KeyEvent e) {
 		char c = e.getKeyChar();
-		System.out.println(c);
+		System.out.println("Character" + c);
 		if(modeSwitch(c)){
 			return;
 		}
