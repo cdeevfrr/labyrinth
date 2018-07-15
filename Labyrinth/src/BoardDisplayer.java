@@ -31,10 +31,10 @@ public class BoardDisplayer extends JPanel implements ChangeListener, KeyListene
 	
 	//The characters used to go to different directions
 	public static final Object[][] bindingsArray = new Object[][] {
-		{'w', Tile.direction("Up") },
-		{'s', Tile.direction("Down") },
-		{'a', Tile.direction("Left") },
-		{'d', Tile.direction("Right") },
+		{'w', Directions.direction("Up") },
+		{'s', Directions.direction("Down") },
+		{'a', Directions.direction("Left") },
+		{'d', Directions.direction("Right") },
 	};
 	
 	//Turn the bindingsArray in to a hash for easy access.
@@ -185,7 +185,7 @@ public class BoardDisplayer extends JPanel implements ChangeListener, KeyListene
 		int direction = keyBindings.getOrDefault(c, -1);
 		if (direction == -1) return false;
 		//TODO see issue #13 on Github, this needs to be abstracted out of the Tile class.
-		Point newLocation = (new Tile(cursorLocation)).coords_in_direction(direction);
+		Point newLocation = Directions.move(cursorLocation, direction);
 		if(isInBoard(newLocation)){
 			cursorLocation = newLocation;
 			this.invalidate();

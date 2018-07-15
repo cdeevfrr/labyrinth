@@ -103,7 +103,7 @@ public class Board {
 	 * @return
 	 */
 	public Tile push(Tile t, int direction){
-		Point newCoords = t.coords_in_direction(direction);
+		Point newCoords = Directions.move(t.location(),direction);
 		Tile overridden = tileAt(newCoords);
 		if (overridden != null){
 			// Have to push the other tile before setting this tile's location,
@@ -151,7 +151,7 @@ public class Board {
 	 * @return
 	 */
 	public boolean movePlayer(Player p, int direction){
-		Point newLocation = (new Tile(p.x, p.y)).coords_in_direction(direction);
+		Point newLocation = Directions.move(p.location(),direction);
 		//TODO add checks for valid movement
 		p.moveTo(newLocation);
 		alertListeners();
