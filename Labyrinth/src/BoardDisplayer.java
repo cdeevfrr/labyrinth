@@ -127,10 +127,15 @@ public class BoardDisplayer extends JPanel implements ChangeListener, KeyListene
 		int missingXPixels = screenWidth % width;
 		int missingYPixels = screenHeight % height;
 		
-		int left = x * pixelsWide;
+		// an x value of board.minX() should show up at the far left of the screen
+		int left = (x - board.minX()) * pixelsWide;
 		int right = left + pixelsWide;
-		// since screen y increases while going down, this is reversed.
-		int top = screenHeight - (y + 1) * pixelsTall;
+		// a y value of board.minY() should show up at the bottom of the screen.
+		// Top will be the visible top, and so will have a smaller screen-y than bottom.
+		// Since screen y increases as we go down, a y value of board.minY() should have 
+		// screen coordinate bounds of (width * pixelsTall) and ( (width+1) * pixelsTall),
+		// which are nearly equal to screenHeight.
+		int top = screenHeight - (y - board.minY() + 1) * pixelsTall;
 		int bottom = top + pixelsTall;
 		return new Point[] {new Point(left, top), new Point(right, bottom)};
 	}
