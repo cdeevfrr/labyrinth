@@ -37,28 +37,28 @@ public class GuiTile{
 				twoThirdsAlongWidth - oneThirdAlongWidth,
 				twoThirdsAlongHeight - oneThirdAlongHeight);
 		//fill up, down, left, right:
-		if(this.tile.unblocked_directions[Directions.direction("Up")]) {
+		if(tile.isUnblocked("Up")) {
 			g.fillRect(
 					oneThirdAlongWidth,
 					topLeft.y, 
 					twoThirdsAlongWidth - oneThirdAlongWidth,
 					oneThirdAlongHeight - topLeft.y);
 		}
-		if(this.tile.unblocked_directions[Directions.direction("Down")]) {
+		if(tile.isUnblocked("Down")) {
 			g.fillRect(
 					oneThirdAlongWidth,
 					twoThirdsAlongHeight,
 					twoThirdsAlongWidth - oneThirdAlongWidth,
 					bottomRight.y - twoThirdsAlongHeight);
 		}
-		if(this.tile.unblocked_directions[Directions.direction("Left")]) {
+		if(tile.isUnblocked("Left")) {
 			g.fillRect(
 					topLeft.x,
 					oneThirdAlongHeight, 
 					oneThirdAlongWidth - topLeft.x,
 					twoThirdsAlongHeight - oneThirdAlongHeight);
 		}
-		if(this.tile.unblocked_directions[Directions.direction("Right")]) {
+		if(tile.isUnblocked("Right")) {
 			g.fillRect(
 					twoThirdsAlongWidth,
 					oneThirdAlongHeight,

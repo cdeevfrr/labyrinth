@@ -151,10 +151,25 @@ public class Board {
 	 * @return
 	 */
 	public boolean movePlayer(Player p, int direction){
+		if (checkMove(p, direction)){
+			Point newLocation = Directions.move(p.location(),direction);
+			p.moveTo(newLocation);
+			alertListeners();
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean checkMove(Player p, int direction){
 		Point newLocation = Directions.move(p.location(),direction);
-		//TODO add checks for valid movement
-		p.moveTo(newLocation);
-		alertListeners();
+		Tile fromTile = tileAt(p.location());
+		if (fromTile == null){
+			return true;
+		}
+		Tile toTile = tileAt(newLocation);
+		if(toTile == null)return false;
+		if(!fromTile.isUnblocked(direction)) return false;
+		if(!toTile.isUnblocked(Directions.opposite(direction))) return false;
 		return true;
 	}
 	public Player getFirstPlayer(){
