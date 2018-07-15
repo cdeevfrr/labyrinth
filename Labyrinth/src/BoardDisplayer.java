@@ -20,7 +20,7 @@ public class BoardDisplayer extends JPanel implements ChangeListener{
 		this.setPreferredSize(new Dimension(600,300));
 	}
 	
-	public void paintComponent(Graphics g){
+	public void paintComponent(Graphics g){ //component??
 		paintTiles(g);
 		paintCharacters(g);
 	}
@@ -28,7 +28,7 @@ public class BoardDisplayer extends JPanel implements ChangeListener{
 	private void paintTiles(Graphics g){
 		for (Tile t : board.tiles){
 			GuiTile gt = new GuiTile(t);
-			Point[] tlBr = screenBounds(t.x, t.y);
+			Point[] tlBr = screenBounds(t.x, t.y); //Screen boundaries of this tile
 			Point topLeft = tlBr[0];
 			Point bottomRight = tlBr[1];
 			gt.paint(g,topLeft, bottomRight);
