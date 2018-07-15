@@ -35,6 +35,20 @@ public class Tile {
 		this.y = p.y;
 	}
 	
+	public boolean isUnblocked(String direction){
+		return isUnblocked(Directions.direction(direction));
+	}
+	public boolean isUnblocked(int direction){
+		return unblocked_directions[direction];
+	}
+	
+	public void setUnblocked(String direction, boolean newVal){
+		this.setUnblocked(Directions.direction(direction), newVal);
+	}
+	public void setUnblocked(int direction, boolean newVal){
+		this.unblocked_directions[direction] = newVal;
+	}
+	
 	
 	public String toString(){
 		return "Tile at " + x + "," + y ;

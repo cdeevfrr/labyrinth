@@ -28,6 +28,25 @@ public class Directions {
 		return -1;
 	}
 	
+	public static int opposite(int direction){
+		switch(direction){
+		case 0:
+			return 2;
+		case 1:
+			return 3;
+		case 2:
+			return 0;
+		case 3:
+			return 1;
+		default:
+			return -1;
+		}
+	}
+	public String opposite(String direction){
+		//convert the string to int, opposite it, then back to string.
+		return direction(opposite(direction(direction)));
+	}
+	
 	public static Point move(Point location, int direction){
 		int x = location.x;
 		int y = location.y;

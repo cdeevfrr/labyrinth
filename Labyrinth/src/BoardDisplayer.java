@@ -283,13 +283,23 @@ public class BoardDisplayer extends JPanel implements ChangeListener, KeyListene
 	
 	public static void main(String[] args){
 		Board b = new Board();
-		ArrayList<String> directionSet = new ArrayList<String>();
-		directionSet.add("Right");
-		directionSet.add("Up");
-		b.tiles.add(new Tile(0,0));
-		b.tiles.add(new Tile(0,1,directionSet));
-		b.tiles.add(new Tile(4,4));
-		b.tiles.add(new Tile(2,2));
+		Tile[] tiles = new Tile[]{
+			new Tile(0,0),
+			new Tile(0,1),
+			new Tile(4,4),
+			new Tile(2,2),
+		};
+		tiles[0].setUnblocked("Up", true);
+		tiles[0].setUnblocked("Right", true);
+		tiles[3].setUnblocked("Right", true);
+		tiles[3].setUnblocked("Left", true);
+		tiles[3].setUnblocked("Up", true);
+		
+		for (Tile t : tiles){
+			b.tiles.add(t);
+		}
+		
+		
 		
 		b.players.add(new Player(2,2,Color.green));
 		

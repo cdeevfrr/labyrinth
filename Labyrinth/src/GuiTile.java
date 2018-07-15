@@ -32,28 +32,28 @@ public class GuiTile{
 				width/3,
 				height/3);
 		//fill up, down, left, right:
-		if(this.tile.unblocked_directions[Directions.direction("Up")]) {
+		if(tile.isUnblocked("Up")) {
 			g.fillRect(
 					topLeft.x + width/3,
 					topLeft.y, 
 					width/3,
 					height/3);
 		}
-		if(this.tile.unblocked_directions[Directions.direction("Down")]) {
+		if(tile.isUnblocked("Down")) {
 			g.fillRect(
 					topLeft.x + width/3,
 					topLeft.y + 2 * height/3, 
 					width/3,
 					height/3);
 		}
-		if(this.tile.unblocked_directions[Directions.direction("Left")]) {
+		if(tile.isUnblocked("Left")) {
 			g.fillRect(
 					topLeft.x,
 					topLeft.y + height/3, 
 					width/3,
 					height/3);
 		}
-		if(this.tile.unblocked_directions[Directions.direction("Right")]) {
+		if(tile.isUnblocked("Right")) {
 			g.fillRect(
 					topLeft.x + 2 * width/3,
 					topLeft.y + height/3, 
