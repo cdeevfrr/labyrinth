@@ -9,12 +9,12 @@ public class Board {
 	ArrayList<Tile> tiles;
 	// listeners listen for changes that need to happen in the interface.
 	ArrayList<ChangeListener> listeners;
-	ArrayList<Character> characters;
+	ArrayList<Player> characters;
 	
 	public Board(){
 		tiles = new ArrayList<Tile>();
 		listeners = new ArrayList<ChangeListener>();
-		characters = new ArrayList<Character>();
+		characters = new ArrayList<Player>();
 	}
 	
 	//TODO make these maxes and mins actually calculate
