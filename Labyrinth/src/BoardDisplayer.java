@@ -17,45 +17,35 @@ public class BoardDisplayer extends JPanel implements ChangeListener, KeyListene
 	private static final long serialVersionUID = 1L;
 	
 	private Board board;
-	private Point cursorLocation;
+	Cursor cursor;
 	public Player currentPlayer;
 	//The current mode used to determine the meaning of keyboard events
-	private ActionMode actionMode;
-	private enum ActionMode{
-		MOVECURSOR,
-		PUSH,
-		PLAYER
-	}
+	private int currentActionMode;
+	private ArrayList<ActionMode> modes;
 	//The character used to switch cursor modes
 	private static final char MODESWITCH = ' ';
-	
-	//The characters used to go to different directions
-	public static final Object[][] bindingsArray = new Object[][] {
-		{'w', Directions.direction("Up") },
-		{'s', Directions.direction("Down") },
-		{'a', Directions.direction("Left") },
-		{'d', Directions.direction("Right") },
-	};
-	
-	//Turn the bindingsArray in to a hash for easy access.
-	public static HashMap<Character, Integer> keyBindings = new HashMap<Character, Integer>();
-	static{
-		for (Object[] pair : bindingsArray){
-			char c = (char)(pair[0]);
-			int i = (int)(pair[1]);
-			keyBindings.put(new Character(c),new Integer(i));
-		}
-	}
 	
 	
 	public BoardDisplayer(Board board){
 		this.board = board;
 		board.add_change_listener(this);
-		this.actionMode = ActionMode.MOVECURSOR;
 		this.setPreferredSize(new Dimension(600,300));
-		this.cursorLocation = new Point(0,0);
+		this.cursor = new Cursor(this);
 		this.addKeyListener(this);
 		this.setFocusable(true);
+		
+		this.modes = new ArrayList<ActionMode>();
+		this.addMode(new CursorMode());
+		this.addMode(new PushTileMode(this.board));
+		this.addMode(new MovePlayerMode(board, board.getFirstPlayer()));
+		this.currentActionMode = 0;
+	}
+	
+	public void addMode(ActionMode m){
+		modes.add(m);
+	}
+	public void removeMode(ActionMode m){
+		modes.remove(m);
 	}
 	
 	public void paintComponent(Graphics g){
@@ -84,23 +74,16 @@ public class BoardDisplayer extends JPanel implements ChangeListener, KeyListene
 		}
 	}
 	public void paintCursor(Graphics g){
-		Point[] tlBr = screenBounds(cursorLocation.x, cursorLocation.y);
+		Point[] tlBr = screenBounds(cursor.location.x, cursor.location.y);
 		Point topLeft = tlBr[0];
 		Point bottomRight = tlBr[1];
 		int width = bottomRight.x - topLeft.x;
 		int height = bottomRight.y - topLeft.y;
-		//Set the color of the cursor based on the current actionMode
-		switch(actionMode){
-		case MOVECURSOR:
-			g.setColor(Color.black);
-			break;
-		case PLAYER:
-			g.setColor(Color.blue);
-			break;
-		case PUSH:
-			g.setColor(Color.GRAY);
-			break;
-		}
+		//Set the color of the cursor based on the currentActionMode
+		// We add 1.0 to avoid integer division and to prevent issues if
+		// there are no modes yet.
+		float hue = (float)(currentActionMode / (modes.size() + 1.0)); 
+		g.setColor(Color.getHSBColor(hue, 0.5f, 0.5f));
 		g.drawRect(topLeft.x, topLeft.y, width, height);
 	}
 	
@@ -158,61 +141,21 @@ public class BoardDisplayer extends JPanel implements ChangeListener, KeyListene
 	 */
 	private boolean modeSwitch(char c){
 		if (c == MODESWITCH){
-			switch(actionMode){
-			case MOVECURSOR:
-				actionMode = ActionMode.PUSH;
-				break;
-			case PUSH:
-				actionMode = ActionMode.PLAYER;
-				break;
-			case PLAYER:
-				actionMode = ActionMode.MOVECURSOR;
-				break;
+			currentActionMode ++;
+			if(currentActionMode >= modes.size()){
+				currentActionMode = 0;
 			}
-			System.out.println(actionMode);
+			System.out.println(getMode());
 			repaint();
 			return true;
 		}
 		return false;
 	}
 	
-	/**
-	 * Move the cursor in the direction specified by c.
-	 * Return true or false based on successful movement.
-	 * @param c
-	 */
-	private boolean moveCursor(char c){
-		int direction = keyBindings.getOrDefault(c, -1);
-		if (direction == -1) return false;
-		//TODO see issue #13 on Github, this needs to be abstracted out of the Tile class.
-		Point newLocation = Directions.move(cursorLocation, direction);
-		if(isInBoard(newLocation)){
-			cursorLocation = newLocation;
-			this.invalidate();
-			this.repaint();
-			return true;
-		}
-		else{
-			return false;
-		}
+	public ActionMode getMode(){
+		return modes.get(currentActionMode);
 	}
 	
-	/**
-	 * Push the tile under the cursor in the direction specified by character c
-	 * Return true if successful, false if this push is invalid.
-	 * 
-	 * TODO implement this
-	 * @param e
-	 */
-	private boolean push(char c){
-		int direction = keyBindings.getOrDefault(c, -1);
-		Tile t = board.tileAt(cursorLocation);
-		if (t != null){
-			board.push(t, direction);
-			return true;
-		}
-		return false;
-	}
 	
 	/**
 	 * Insert the held tile into the current location 
@@ -224,23 +167,6 @@ public class BoardDisplayer extends JPanel implements ChangeListener, KeyListene
 	 */
 	private Tile insert(char c){
 		return null;
-	}
-	
-	/**
-	 * Move the player in the direction specified by character c,
-	 * or else do nothing.
-	 * @param c
-	 * @return
-	 */
-	private boolean movePlayer(char c){
-		if(currentPlayer == null){
-			getFirstPlayer();
-		}
-		int direction = keyBindings.getOrDefault(c, -1);
-		if(direction != -1){
-			return board.movePlayer(currentPlayer, direction);
-		}
-		return false;
 	}
 	
 	public void getFirstPlayer(){
@@ -259,19 +185,7 @@ public class BoardDisplayer extends JPanel implements ChangeListener, KeyListene
 			return;
 		}
 		else{
-			switch(actionMode){
-			case MOVECURSOR:
-				moveCursor(c);
-				break;
-			case PUSH:
-				if(push(c)){
-					moveCursor(c);
-				}
-				break;
-			case PLAYER:
-				movePlayer(c);
-				break;
-			}
+			getMode().keyPressed(c, cursor);
 		}
 	}
 	@Override
