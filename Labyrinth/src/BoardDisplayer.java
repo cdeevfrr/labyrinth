@@ -197,14 +197,15 @@ public class BoardDisplayer extends JPanel implements ChangeListener, KeyListene
 	
 	/**
 	 * Push the tile under the cursor in the direction specified by character c
-	 * Return the tile returned by push.
+	 * Return true if successful, false if this push is invalid.
 	 * 
 	 * TODO implement this
 	 * @param e
 	 */
-	private Tile push(char c){
+	private boolean push(char c){
 		int direction = keyBindings.getOrDefault(c, -1);
-		return board.push(board.tileAt(cursorLocation), direction);
+		board.push(board.tileAt(cursorLocation), direction);
+		return true;
 	}
 	
 	/**
@@ -237,7 +238,9 @@ public class BoardDisplayer extends JPanel implements ChangeListener, KeyListene
 				moveCursor(c);
 				break;
 			case PUSH:
-				push(c);
+				if(push(c)){
+					moveCursor(c);
+				}
 				break;
 			case INSERT:
 				insert(c);
