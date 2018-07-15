@@ -1,7 +1,44 @@
 import java.util.HashMap;
 import java.util.Map;
 
-
+/**
+ * 
+ * @author dannyrivers
+ *
+ * Extend action mode in order to generate custom behavior
+ * when a user presses a key.
+ * 
+ * The physics package will automatically let the user cycle
+ * through action modes that you give to the BoardDisplayer.
+ * You can create an action mode by overriding this class, and 
+ * handle key presses in the keyPressed method of your ActionMode.
+ * Then, whenever the user is using your mode, their keypresses
+ * will perform the actions you defined.
+ * 
+ * For example, here is pseudocode from the PushTile ActionMode
+ * 
+ *  public class PushTileMode extends ActionMode {
+ *      @Override
+ *  	public boolean keyPressed(char c, Cursor cursor) {
+ *          int direction = getDirection(c); //helper method from ActionMode
+ *          if (direction != -1){
+ *          	// push the row/column the cursor is pointing to
+ *              // in the direction specified by direction
+ *          }
+ *          else{
+ *              //custom code for other key pushes (try to use 
+ *              // the HashMap 'ActionMode.binding' so that users can choose which
+ *              // characters to push in order to implement your behavior.)
+ *          }
+ *      }
+ *  }
+ * 
+ *  main(){
+ *      BoardDisplayer b = new BoardDisplayer();
+ *      //other settings or setup for our BoardDisplayer
+ *      b.addMode(new PushTileMode());
+ *  }
+ */
 public abstract class ActionMode {
 	Map<Character, Integer> binding;
 	
