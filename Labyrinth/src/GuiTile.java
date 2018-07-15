@@ -34,36 +34,36 @@ public class GuiTile{
 		g.fillRect(
 				oneThirdAlongWidth,
 				oneThirdAlongHeight,
-				width/3,
-				height/3);
+				twoThirdsAlongWidth - oneThirdAlongWidth,
+				twoThirdsAlongHeight - oneThirdAlongHeight);
 		//fill up, down, left, right:
 		if(this.tile.unblocked_directions[Tile.direction("Up")]) {
 			g.fillRect(
 					oneThirdAlongWidth,
 					topLeft.y, 
-					width/3,
-					height/3);
+					twoThirdsAlongWidth - oneThirdAlongWidth,
+					oneThirdAlongHeight - topLeft.y);
 		}
 		if(this.tile.unblocked_directions[Tile.direction("Down")]) {
 			g.fillRect(
 					oneThirdAlongWidth,
 					twoThirdsAlongHeight,
-					width/3,
-					height/3);
+					twoThirdsAlongWidth - oneThirdAlongWidth,
+					bottomRight.y - twoThirdsAlongHeight);
 		}
 		if(this.tile.unblocked_directions[Tile.direction("Left")]) {
 			g.fillRect(
 					topLeft.x,
 					oneThirdAlongHeight, 
-					width/3,
-					height/3);
+					oneThirdAlongWidth - topLeft.x,
+					twoThirdsAlongHeight - oneThirdAlongHeight);
 		}
 		if(this.tile.unblocked_directions[Tile.direction("Right")]) {
 			g.fillRect(
 					twoThirdsAlongWidth,
 					oneThirdAlongHeight,
-					width/3,
-					height/3);
+					bottomRight.x - twoThirdsAlongWidth,
+					twoThirdsAlongHeight - oneThirdAlongHeight);
 		}
 	}
 }
