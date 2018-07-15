@@ -8,10 +8,12 @@ public class Board {
 	ArrayList<Tile> tiles;
 	// listeners listen for changes that need to happen in the interface.
 	ArrayList<ChangeListener> listeners;
+	ArrayList<Character> characters;
 	
 	public Board(){
 		tiles = new ArrayList<Tile>();
 		listeners = new ArrayList<ChangeListener>();
+		characters = new ArrayList<Character>();
 	}
 	
 	public void add_change_listener(ChangeListener c){

@@ -18,7 +18,7 @@ public class GuiTile{
 		int width = bottomRight.x - topLeft.x;
 		int height = bottomRight.y - topLeft.y;
 		g.setColor(Color.CYAN);
-		g.drawRect(
+		g.fillRect(
 				topLeft.x,
 				topLeft.y, 
 				width,
