@@ -14,6 +14,11 @@ public class Tile {
 		this.y = y;
 	}
 	
+	public Tile (Point p){
+		this.x = p.x;
+		this.y = p.y;
+	}
+	
 	public void setLocation(Point p){
 		this.x = p.x;
 		this.y = p.y;

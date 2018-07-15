@@ -9,12 +9,12 @@ public class Board {
 	ArrayList<Tile> tiles;
 	// listeners listen for changes that need to happen in the interface.
 	ArrayList<ChangeListener> listeners;
-	ArrayList<Character> characters;
+	ArrayList<Player> characters;
 	
 	public Board(){
 		tiles = new ArrayList<Tile>();
 		listeners = new ArrayList<ChangeListener>();
-		characters = new ArrayList<Character>();
+		characters = new ArrayList<Player>();
 	}
 	
 	//TODO make these maxes and mins actually calculate
@@ -78,7 +78,7 @@ public class Board {
 		}
 		return null;
 	}
-	public Tile tile_at(Point p){
+	public Tile tileAt(Point p){
 		return tileAt(p.x, p.y);
 	}
 	
@@ -104,16 +104,18 @@ public class Board {
 	 */
 	public Tile push(Tile t, int direction){
 		Point newCoords = t.coords_in_direction(direction);
-		Tile overridden = tile_at(newCoords);
+		Tile overridden = tileAt(newCoords);
 		if (overridden != null){
 			// Have to push the other tile before setting this tile's location,
 			// otherwise tile_at may be invalid for some time.
 			Tile result =  push(overridden, direction);
 			t.setLocation(newCoords);
+			alertListeners();
 			return result;
 		}
 		else{
 			t.setLocation(newCoords);
+			alertListeners();
 			return t;
 		}
 	}
@@ -129,7 +131,7 @@ public class Board {
 	 * @return
 	 */
 	public Tile insert(Tile t, Point location, int direction){
-		Tile overridden = tile_at(location);
+		Tile overridden = tileAt(location);
 		if (overridden != null){
 			Tile result = push(overridden, direction);
 			t.setLocation(location);
@@ -141,7 +143,7 @@ public class Board {
 		}
 	}
 	
-	public void alert_listeners(){
+	private void alertListeners(){
 		for (ChangeListener l : listeners){
 			l.stateChanged(null);
 		}
