@@ -228,7 +228,6 @@ public class BoardDisplayer extends JPanel implements ChangeListener, KeyListene
 	@Override
 	public void keyTyped(KeyEvent e) {
 		char c = e.getKeyChar();
-		System.out.println("Character" + c);
 		if(modeSwitch(c)){
 			return;
 		}
