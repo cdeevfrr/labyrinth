@@ -18,12 +18,13 @@ public class BoardDisplayer extends JPanel implements ChangeListener, KeyListene
 	
 	private Board board;
 	private Point cursorLocation;
+	public Player currentPlayer;
 	//The current mode used to determine the meaning of keyboard events
 	private ActionMode actionMode;
 	private enum ActionMode{
 		MOVECURSOR,
 		PUSH,
-		INSERT
+		PLAYER
 	}
 	//The character used to switch cursor modes
 	private static final char MODESWITCH = ' ';
@@ -74,8 +75,8 @@ public class BoardDisplayer extends JPanel implements ChangeListener, KeyListene
 	}
 	
 	public void paintCharacters(Graphics g){
-		for (Player c : board.characters){
-			GuiCharacter gc = new GuiCharacter(c);
+		for (Player c : board.players){
+			GuiPlayer gc = new GuiPlayer(c);
 			Point[] tlBr = screenBounds(c.x, c.y);
 			Point topLeft = tlBr[0];
 			Point bottomRight = tlBr[1];
@@ -93,7 +94,7 @@ public class BoardDisplayer extends JPanel implements ChangeListener, KeyListene
 		case MOVECURSOR:
 			g.setColor(Color.black);
 			break;
-		case INSERT:
+		case PLAYER:
 			g.setColor(Color.blue);
 			break;
 		case PUSH:
@@ -128,10 +129,15 @@ public class BoardDisplayer extends JPanel implements ChangeListener, KeyListene
 		int missingXPixels = screenWidth % width;
 		int missingYPixels = screenHeight % height;
 		
-		int left = x * pixelsWide;
+		// an x value of board.minX() should show up at the far left of the screen
+		int left = (x - board.minX()) * pixelsWide;
 		int right = left + pixelsWide;
-		// since screen y increases while going down, this is reversed.
-		int top = screenHeight - (y + 1) * pixelsTall;
+		// a y value of board.minY() should show up at the bottom of the screen.
+		// Top will be the visible top, and so will have a smaller screen-y than bottom.
+		// Since screen y increases as we go down, a y value of board.minY() should have 
+		// screen coordinate bounds of (width * pixelsTall) and ( (width+1) * pixelsTall),
+		// which are nearly equal to screenHeight.
+		int top = screenHeight - (y - board.minY() + 1) * pixelsTall;
 		int bottom = top + pixelsTall;
 		return new Point[] {new Point(left, top), new Point(right, bottom)};
 	}
@@ -157,9 +163,9 @@ public class BoardDisplayer extends JPanel implements ChangeListener, KeyListene
 				actionMode = ActionMode.PUSH;
 				break;
 			case PUSH:
-				actionMode = ActionMode.INSERT;
+				actionMode = ActionMode.PLAYER;
 				break;
-			case INSERT:
+			case PLAYER:
 				actionMode = ActionMode.MOVECURSOR;
 				break;
 			}
@@ -193,14 +199,19 @@ public class BoardDisplayer extends JPanel implements ChangeListener, KeyListene
 	
 	/**
 	 * Push the tile under the cursor in the direction specified by character c
-	 * Return the tile returned by push.
+	 * Return true if successful, false if this push is invalid.
 	 * 
 	 * TODO implement this
 	 * @param e
 	 */
-	private Tile push(char c){
+	private boolean push(char c){
 		int direction = keyBindings.getOrDefault(c, -1);
-		return board.push(board.tileAt(cursorLocation), direction);
+		Tile t = board.tileAt(cursorLocation);
+		if (t != null){
+			board.push(t, direction);
+			return true;
+		}
+		return false;
 	}
 	
 	/**
@@ -214,6 +225,27 @@ public class BoardDisplayer extends JPanel implements ChangeListener, KeyListene
 	private Tile insert(char c){
 		return null;
 	}
+	
+	/**
+	 * Move the player in the direction specified by character c,
+	 * or else do nothing.
+	 * @param c
+	 * @return
+	 */
+	private boolean movePlayer(char c){
+		if(currentPlayer == null){
+			getFirstPlayer();
+		}
+		int direction = keyBindings.getOrDefault(c, -1);
+		if(direction != -1){
+			return board.movePlayer(currentPlayer, direction);
+		}
+		return false;
+	}
+	
+	public void getFirstPlayer(){
+		currentPlayer = board.getFirstPlayer();
+	}
 
 	@Override
 	public void stateChanged(ChangeEvent e) {
@@ -223,7 +255,6 @@ public class BoardDisplayer extends JPanel implements ChangeListener, KeyListene
 	@Override
 	public void keyTyped(KeyEvent e) {
 		char c = e.getKeyChar();
-		System.out.println("Character" + c);
 		if(modeSwitch(c)){
 			return;
 		}
@@ -233,10 +264,12 @@ public class BoardDisplayer extends JPanel implements ChangeListener, KeyListene
 				moveCursor(c);
 				break;
 			case PUSH:
-				push(c);
+				if(push(c)){
+					moveCursor(c);
+				}
 				break;
-			case INSERT:
-				insert(c);
+			case PLAYER:
+				movePlayer(c);
 				break;
 			}
 		}
@@ -258,7 +291,7 @@ public class BoardDisplayer extends JPanel implements ChangeListener, KeyListene
 		b.tiles.add(new Tile(4,4));
 		b.tiles.add(new Tile(2,2));
 		
-		b.characters.add(new Player(2,2,Color.green));
+		b.players.add(new Player(2,2,Color.green));
 		
 		JFrame f = new JFrame();
 		f.setContentPane(new BoardDisplayer(b));

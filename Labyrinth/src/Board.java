@@ -9,12 +9,12 @@ public class Board {
 	ArrayList<Tile> tiles;
 	// listeners listen for changes that need to happen in the interface.
 	ArrayList<ChangeListener> listeners;
-	ArrayList<Player> characters;
+	ArrayList<Player> players;
 	
 	public Board(){
 		tiles = new ArrayList<Tile>();
 		listeners = new ArrayList<ChangeListener>();
-		characters = new ArrayList<Player>();
+		players = new ArrayList<Player>();
 	}
 	
 	//TODO make these maxes and mins actually calculate
@@ -141,6 +141,39 @@ public class Board {
 			t.setLocation(location);
 			return t;
 		}
+	}
+	
+	/**
+	 * Try to move the player in this direction.
+	 * If it worked, return true, otherwise false.
+	 * @param p
+	 * @param direction
+	 * @return
+	 */
+	public boolean movePlayer(Player p, int direction){
+		Point newLocation = (new Tile(p.x, p.y)).coords_in_direction(direction);
+		//TODO add checks for valid movement
+		p.moveTo(newLocation);
+		alertListeners();
+		return true;
+	}
+	public Player getFirstPlayer(){
+		if (players.isEmpty()){
+			throw new RuntimeException("Cannot get player because the board has no players");
+		}
+		return players.get(0);
+	}
+	
+	
+	public Player nextPlayer(Player p){
+		if(!players.contains(p)){
+			throw new RuntimeException("Tried to find the player after a non-existent player");
+		}
+		int index = players.indexOf(p) + 1;
+		if (index >= players.size()){
+			index = 0;
+		}
+		return players.get(index);
 	}
 	
 	private void alertListeners(){

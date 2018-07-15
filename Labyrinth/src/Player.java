@@ -1,4 +1,5 @@
 import java.awt.Color;
+import java.awt.Point;
 
 public class Player {
 	int x;
@@ -10,6 +11,11 @@ public class Player {
 		this.x = x;
 		this.y = y;
 		this.color = c;
+	}
+	
+	public void moveTo(Point p){
+		this.x = p.x;
+		this.y = p.y;
 	}
 
 }
