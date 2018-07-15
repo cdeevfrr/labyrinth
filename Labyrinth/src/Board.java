@@ -1,3 +1,4 @@
+import java.awt.Point;
 import java.util.ArrayList;
 
 import javax.swing.event.ChangeListener;
@@ -41,7 +42,7 @@ public class Board {
 	 * @param y
 	 * @return
 	 */
-	public Tile tile_at(int x, int y){
+	public Tile tileAt(int x, int y){
 		for (Tile t : tiles){
 			if (t.x == x && t.y == y){
 				return t;
@@ -49,13 +50,16 @@ public class Board {
 		}
 		return null;
 	}
+	public Tile tile_at(Point p){
+		return tileAt(p.x, p.y);
+	}
 	
 	/**
 	 * Push the tile t in the direction specified, where 
 	 * direction numbers come from the Tile.DIRECTIONS.
 	 * 
-	 * If a tile is pushed off the board, return the tile that was pushed off.
-	 * Otherwise return null.
+	 * Return the last moved tile, so that if something goes off the board it 
+	 * will be returned.
 	 * 
 	 * For implementation, I'm thinking that we should make a method on Tile,
 	 * tile.move(direction), which returns the x,y coordinates to the 'direction'
@@ -71,7 +75,42 @@ public class Board {
 	 * @return
 	 */
 	public Tile push(Tile t, int direction){
-		
+		Point newCoords = t.coords_in_direction(direction);
+		Tile overridden = tile_at(newCoords);
+		if (overridden != null){
+			// Have to push the other tile before setting this tile's location,
+			// otherwise tile_at may be invalid for some time.
+			Tile result =  push(overridden, direction);
+			t.setLocation(newCoords);
+			return result;
+		}
+		else{
+			t.setLocation(newCoords);
+			return t;
+		}
+	}
+	
+	/**
+	 * Add the given tile to the board, pushing existing tiles
+	 * in the specified direction.
+	 * 
+	 * Return the last tile moved, so that if something goes off the board,
+	 * it will be the returned tile.
+	 * @param t
+	 * @param direction
+	 * @return
+	 */
+	public Tile insert(Tile t, Point location, int direction){
+		Tile overridden = tile_at(location);
+		if (overridden != null){
+			Tile result = push(overridden, direction);
+			t.setLocation(location);
+			return result;
+		}
+		else{
+			t.setLocation(location);
+			return t;
+		}
 	}
 	
 	public void alert_listeners(){
