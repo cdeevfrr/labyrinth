@@ -1,6 +1,8 @@
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Point;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -8,15 +10,19 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 
-public class BoardDisplayer extends JPanel implements ChangeListener{
+public class BoardDisplayer extends JPanel implements ChangeListener, KeyListener{
 	private static final long serialVersionUID = 1L;
 	
 	private Board board;
+	private Point cursorLocation;
 	
 	public BoardDisplayer(Board board){
 		this.board = board;
 		board.add_change_listener(this);
 		this.setPreferredSize(new Dimension(600,300));
+		this.cursorLocation = new Point(0,0);
+		this.addKeyListener(this);
+		this.setFocusable(true);
 	}
 	
 	public void paintComponent(Graphics g){
@@ -59,7 +65,6 @@ public class BoardDisplayer extends JPanel implements ChangeListener{
 	
 	
 	public static void main(String[] args){
-		
 		Board b = new Board();
 		b.tiles.add(new Tile(0,0));
 		b.tiles.add(new Tile(0,1));
@@ -73,6 +78,17 @@ public class BoardDisplayer extends JPanel implements ChangeListener{
 		//Quit the program when this frame is closed.
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f.setVisible(true);
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+		System.out.println(e.getKeyChar());
+	}
+	@Override
+	public void keyPressed(KeyEvent e) {
+	}
+	@Override
+	public void keyReleased(KeyEvent e) {
 	}
 	
 	
