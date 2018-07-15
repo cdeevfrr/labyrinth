@@ -56,10 +56,13 @@ public class BoardDisplayer extends JPanel implements ChangeListener{
 	 * @return
 	 */
 	public Point[] screenBounds(int x, int y){
+		//width is the number of tiles
+		//screenWidth is the number of pixels on the screen
+		//pixelsWide is number of pixels in a tile's width
 		int screenWidth = this.getWidth();
 		int screenHeight = this.getHeight();
-		int width = board.maxX() - board.minX();
-		int height = board.maxY() - board.minY();
+		int width = board.maxX() - board.minX() + 1;
+		int height = board.maxY() - board.minY() + 1;
 		int pixelsWide = screenWidth/width;
 		int pixelsTall = screenHeight/height;
 
