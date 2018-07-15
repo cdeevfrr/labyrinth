@@ -205,8 +205,12 @@ public class BoardDisplayer extends JPanel implements ChangeListener, KeyListene
 	 */
 	private boolean push(char c){
 		int direction = keyBindings.getOrDefault(c, -1);
-		board.push(board.tileAt(cursorLocation), direction);
-		return true;
+		Tile t = board.tileAt(cursorLocation);
+		if (t != null){
+			board.push(t, direction);
+			return true;
+		}
+		return false;
 	}
 	
 	/**
