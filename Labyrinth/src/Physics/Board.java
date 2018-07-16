@@ -1,3 +1,4 @@
+package Physics;
 import java.awt.Point;
 import java.util.ArrayList;
 
@@ -84,7 +85,7 @@ public class Board {
 	
 	/**
 	 * Push the tile t in the direction specified, where 
-	 * direction numbers come from the Tile.DIRECTIONS.
+	 * direction numbers come from the the Directions class.
 	 * 
 	 * Return the last moved tile, so that if something goes off the board it 
 	 * will be returned.
@@ -141,6 +142,14 @@ public class Board {
 			t.setLocation(location);
 			return t;
 		}
+	}
+	
+	public void setTiles(ArrayList<Tile> t) {
+		this.tiles = t;
+	}
+	
+	public void addPlayer(Player p) {
+		this.players.add(p);
 	}
 	
 	/**
