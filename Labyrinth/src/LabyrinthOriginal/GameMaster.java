@@ -63,8 +63,6 @@ public class GameMaster {
 		return board;
 	}
 	
-	//makeTile: make a tile. select numBranches directions from 
-	//the directions list and add those directions to the tile.
 	/**
 	 * Makes a tile, then add unblocked directions to the tile.
 	 * The number of unblocked directions is given by numBranches.
@@ -89,5 +87,5 @@ public class GameMaster {
 	
 	public static void main(String[] args) {
 		GameMaster.gameStartUp();
+		}
 	}
-}

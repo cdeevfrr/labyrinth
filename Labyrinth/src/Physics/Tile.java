@@ -34,6 +34,9 @@ public class Tile {
 		this.x = p.x;
 		this.y = p.y;
 	}
+	public void setUnblocked(int i, boolean b) {
+		this.unblocked_directions[i] = b;
+	}
 	
 	/**
 	 * Find the direction number associated with this string
