@@ -1,58 +1,58 @@
 package Physics;
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.swing.event.ChangeListener;
 
 
 public class Board {
 	// The list of tiles in this board. Tiles store their x,y locations.
-	ArrayList<Tile> tiles;
+	HashMap<Point, Tile> tiles;
 	// listeners listen for changes that need to happen in the interface.
 	ArrayList<ChangeListener> listeners;
 	ArrayList<Player> players;
 	
 	public Board(){
-		tiles = new ArrayList<Tile>();
+		tiles = new HashMap<Point, Tile>();
 		listeners = new ArrayList<ChangeListener>();
 		players = new ArrayList<Player>();
 	}
 	
-	//TODO make these maxes and mins actually calculate
 	// These will help the board be dynamically sized, 
 	// and it will automatically show the furthest two tiles that exist.
 	public int maxX(){
 		int currentMax = 0;
-		for (Tile t : tiles) {
-			if( t.x > currentMax) {
-				currentMax = t.x;
+		for (Point p : tiles.keySet()) {
+			if( p.x > currentMax) {
+				currentMax = p.x;
 			}
 		}
 		return currentMax;
 	}
 	public int maxY(){
 		int currentMax = 0;
-		for(Tile t : tiles) {
-			if(t.y > currentMax) {
-				currentMax = t.y;
+		for(Point p : tiles.keySet()) {
+			if(p.y > currentMax) {
+				currentMax = p.y;
 			}
 		}
 		return currentMax;
 	}
 	public int minX(){
 		int currentMin = 99999;
-		for (Tile t : tiles) {
-			if(t.x < currentMin) {
-				currentMin = t.x;
+		for (Point p : tiles.keySet()) {
+			if(p.x < currentMin) {
+				currentMin = p.x;
 			}
 		}
 		return currentMin;
 	}
 	public int minY(){
 		int currentMin = 99999;
-		for (Tile t : tiles) {
-			if(t.y < currentMin) {
-				currentMin = t.y;
+		for (Point p : tiles.keySet()) {
+			if(p.y < currentMin) {
+				currentMin = p.y;
 			}
 		}
 		return currentMin;
@@ -62,25 +62,20 @@ public class Board {
 		listeners.add(c);
 	}
 	
-	//TODO implement this to run better than O(n)
 	/**
 	 * Find the tile at x,y
-	 * Should eventually be implemented to be O(1) time.
-	 * May return null if no such tile exists.
+	 * Should run in O(1) time.
+	 * Returns null if no such tile exists.
 	 * @param x
 	 * @param y
 	 * @return
 	 */
 	public Tile tileAt(int x, int y){
-		for (Tile t : tiles){
-			if (t.x == x && t.y == y){
-				return t;
-			}
-		}
-		return null;
+		return tileAt(new Point(x,y));
 	}
+	
 	public Tile tileAt(Point p){
-		return tileAt(p.x, p.y);
+		return tiles.get(p);
 	}
 	
 	/**
@@ -110,12 +105,12 @@ public class Board {
 			// Have to push the other tile before setting this tile's location,
 			// otherwise tile_at may be invalid for some time.
 			Tile result =  push(overridden, direction);
-			t.setLocation(newCoords);
+			this.changeTileLocation(t, newCoords);
 			alertListeners();
 			return result;
 		}
 		else{
-			t.setLocation(newCoords);
+			this.changeTileLocation(t, newCoords);
 			alertListeners();
 			return t;
 		}
@@ -135,20 +130,33 @@ public class Board {
 		Tile overridden = tileAt(location);
 		if (overridden != null){
 			Tile result = push(overridden, direction);
-			t.setLocation(location);
+			this.changeTileLocation(t, location);
 			return result;
 		}
 		else{
-			t.setLocation(location);
+			this.changeTileLocation(t, location);
 			return t;
 		}
 	}
 	
-	public void setTiles(ArrayList<Tile> t) {
+	public void changeTileLocation(Tile t, Point newLocation) {
+		Point oldLocation = t.location();
+		t.setLocation(newLocation);
+		this.getTiles().put(newLocation, t);
+		this.getTiles().remove(oldLocation,t);
+	}
+	
+	public void setTiles(HashMap<Point,Tile> t) {
 		this.tiles = t;
 	}
 	
-	public ArrayList<Tile> getTiles() {
+	public void setTiles(ArrayList<Tile> tiles) {
+		for(Tile tile : tiles) {
+			this.getTiles().put(tile.location(), tile);
+		}
+	}
+	
+	public HashMap<Point,Tile> getTiles() {
 		return this.tiles;
 	}
 	
@@ -176,9 +184,11 @@ public class Board {
 	public boolean checkMove(Player p, int direction){
 		Point newLocation = Directions.move(p.location(),direction);
 		Tile fromTile = p.getTile();
-		if (fromTile == null) { //This probably is no longer necessary.
+		//This probably is no longer necessary (b/c players must be on a tile):
+		if (fromTile == null) { 
 			return true;
 		}
+		//
 		Tile toTile = tileAt(newLocation);
 		if(toTile == null)return false;
 		if(!fromTile.isUnblocked(direction)) return false;

@@ -16,11 +16,6 @@ public class Player {
 		this.tile = t;
 	}
 	
-/*	public void moveTo(Point p){
-		this.x = p.x;
-		this.y = p.y;
-	}
-*/
 	public Tile getTile() {
 		return this.tile;
 	}

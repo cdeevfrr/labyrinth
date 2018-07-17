@@ -56,7 +56,8 @@ public class BoardDisplayer extends JPanel implements ChangeListener, KeyListene
 	}
 	
 	private void paintTiles(Graphics g){
-		for (Tile t : board.tiles){
+		for (Point key : this.board.getTiles().keySet()){
+			Tile t = this.board.getTiles().get(key);
 			GuiTile gt = new GuiTile(t);
 			Point[] tlBr = screenBounds(t.x, t.y); //Screen boundaries of this tile
 			Point topLeft = tlBr[0];
@@ -211,7 +212,7 @@ public class BoardDisplayer extends JPanel implements ChangeListener, KeyListene
 		tiles[3].setUnblocked("Up", true);
 		
 		for (Tile t : tiles){
-			b.tiles.add(t);
+			b.tiles.put(t.location(),t);
 		}
 		
 		

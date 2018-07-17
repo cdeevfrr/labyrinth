@@ -17,7 +17,7 @@ public class GameMaster {
 	public static void gameStartUp() {
 		Board b = newBoard(5,5);
 		
-		b.addPlayer(new Player(b.getTiles().get(1),Color.green));
+		b.addPlayer(new Player(b.tileAt(0,0),Color.green));
 		
 		JFrame f = new JFrame();
 		f.setContentPane(new BoardDisplayer(b));
