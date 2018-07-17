@@ -1,3 +1,6 @@
+package Physics;
+
+
 import static org.junit.Assert.*;
 
 import java.awt.Point;

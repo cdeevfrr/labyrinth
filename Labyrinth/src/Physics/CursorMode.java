@@ -1,4 +1,4 @@
-
+package Physics;
 public class CursorMode extends ActionMode{
 	@Override
 	public boolean keyPressed(char c, Cursor cursor) {

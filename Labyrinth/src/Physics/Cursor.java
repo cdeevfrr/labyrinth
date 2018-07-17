@@ -1,5 +1,5 @@
+package Physics;
 import java.awt.Point;
-
 
 public class Cursor {
 	Point location;

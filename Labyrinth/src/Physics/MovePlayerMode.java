@@ -1,5 +1,4 @@
-
-
+package Physics;
 public class MovePlayerMode extends ActionMode{
 	Board board;
 	Player player;
