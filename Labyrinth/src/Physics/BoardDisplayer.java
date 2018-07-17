@@ -68,7 +68,7 @@ public class BoardDisplayer extends JPanel implements ChangeListener, KeyListene
 	public void paintCharacters(Graphics g){
 		for (Player c : board.players){
 			GuiPlayer gc = new GuiPlayer(c);
-			Point[] tlBr = screenBounds(c.x, c.y);
+			Point[] tlBr = screenBounds(c.location().x, c.location().y);
 			Point topLeft = tlBr[0];
 			Point bottomRight = tlBr[1];
 			gc.paint(g, topLeft, bottomRight);
@@ -216,7 +216,7 @@ public class BoardDisplayer extends JPanel implements ChangeListener, KeyListene
 		
 		
 		
-		b.players.add(new Player(2,2,Color.green));
+		b.players.add(new Player(tiles[1],Color.green));
 		
 		JFrame f = new JFrame();
 		f.setContentPane(new BoardDisplayer(b));

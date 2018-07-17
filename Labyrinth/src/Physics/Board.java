@@ -148,6 +148,10 @@ public class Board {
 		this.tiles = t;
 	}
 	
+	public ArrayList<Tile> getTiles() {
+		return this.tiles;
+	}
+	
 	public void addPlayer(Player p) {
 		this.players.add(p);
 	}
@@ -162,7 +166,7 @@ public class Board {
 	public boolean movePlayer(Player p, int direction){
 		if (checkMove(p, direction)){
 			Point newLocation = Directions.move(p.location(),direction);
-			p.moveTo(newLocation);
+			p.moveTo(this.tileAt(newLocation));
 			alertListeners();
 			return true;
 		}
@@ -171,8 +175,8 @@ public class Board {
 	
 	public boolean checkMove(Player p, int direction){
 		Point newLocation = Directions.move(p.location(),direction);
-		Tile fromTile = tileAt(p.location());
-		if (fromTile == null){
+		Tile fromTile = p.getTile();
+		if (fromTile == null) { //This probably is no longer necessary.
 			return true;
 		}
 		Tile toTile = tileAt(newLocation);
