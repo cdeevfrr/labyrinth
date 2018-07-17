@@ -18,5 +18,9 @@ public class Player {
 		this.x = p.x;
 		this.y = p.y;
 	}
+	
+	public Point location(){
+		return new Point(this.x, this.y);
+	}
 
 }

@@ -55,7 +55,7 @@ public class BoardTester {
 		//We will push 3 times, first moving the first column down,
 		// then moving t1 right, then moving t1 right again.
 		
-		Tile result = b.push(t1, Tile.direction("Down"));
+		Tile result = b.push(t1, Directions.direction("Down"));
 		assertEquals(result, t5);
 		//first row goes down
 		assertEquals(t1.x, 0);
@@ -71,7 +71,7 @@ public class BoardTester {
 		assertEquals(t2.x, 2);
 		assertEquals(t2.x, 2);
 		
-		result = b.push(t1,Tile.direction("Right"));
+		result = b.push(t1, Directions.direction("Right"));
 		assertEquals(result, t1);
 		//T1 goes right
 		assertEquals(t1.x, 1);
@@ -87,7 +87,7 @@ public class BoardTester {
 		assertEquals(t2.x, 2);
 		assertEquals(t2.x, 2);
 		
-		result = b.push(t1,Tile.direction("Right"));
+		result = b.push(t1, Directions.direction("Right"));
 		assertEquals(result, t4);
 		//T1 goes right
 		assertEquals(t1.x, 2);
@@ -109,7 +109,7 @@ public class BoardTester {
 	@Test
 	public void testInserting() {
 		Tile t6 = new Tile(0,0);
-		Tile result = b.insert(t6, new Point(0,2), Tile.direction("Down"));
+		Tile result = b.insert(t6, new Point(0,2), Directions.direction("Down"));
 		assertEquals(result, t5);
 		//t6 is inserted
 		assertEquals(t6.x, 0);
