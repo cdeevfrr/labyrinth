@@ -5,9 +5,9 @@ import java.awt.Point;
 
 
 public class GuiPlayer {
-	public Player character;
+	public Player player;
 	public GuiPlayer(Player c){
-		this.character = c;
+		this.player = c;
 	}
 	
 	public void paint(Graphics g, Point topLeft, Point bottomRight){
@@ -15,9 +15,9 @@ public class GuiPlayer {
 		int y = topLeft.y;
 		int width = bottomRight.x - topLeft.x;
 		int height = bottomRight.y - topLeft.y;
-		g.setColor(character.color);
+		g.setColor(player.color);
 		//TODO make a better character
 		int buffer = 10;
-		g.fillRect(x + buffer, y + buffer, width - 2*buffer, height - 2*buffer);
+		g.fillOval(x + buffer, y + buffer, width - 2*buffer, height - 2*buffer);
 	}
 }
