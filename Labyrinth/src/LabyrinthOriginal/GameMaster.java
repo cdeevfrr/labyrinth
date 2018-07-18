@@ -13,11 +13,18 @@ import java.util.Collections;
 import javax.swing.JFrame;
 
 public class GameMaster {
+
+	public static final Integer[] DISTRIBUTION = {0,0,5,2,0}; //0,1,2,3,4
+	public static final int TILESIDES = DISTRIBUTION.length - 1;
 	
+	/**
+	 * Creates the board, a player, and the GUI window.
+	 */
 	public static void gameStartUp() {
 		Board b = newBoard(5,5);
 		
 		b.addPlayer(new Player(b.tileAt(0,0),Color.green));
+		b.addPlayer(new Player(b.tileAt(4,4),Color.blue));
 		
 		JFrame f = new JFrame();
 		f.setContentPane(new BoardDisplayer(b));
@@ -30,9 +37,15 @@ public class GameMaster {
 	
 	}
 	
-	public static final Integer[] DISTRIBUTION = {0,0,5,2,0}; //0,1,2,3,4
-	public static final int TILESIDES = DISTRIBUTION.length - 1;
-	
+	/**
+	 * Makes a new board given height and width parameters. 
+	 * DISTRIBUTION and (indirectly) TILESIDES also influence 
+	 * the board construction.
+	 * numBranches := The number of unblocked directions.
+	 * @param tilesWide
+	 * @param tilesTall
+	 * @return
+	 */
 	public static Board newBoard(int tilesWide, int tilesTall) {
 		int totalTiles = tilesWide * tilesTall;
 		Board board = new Board();
@@ -64,7 +77,7 @@ public class GameMaster {
 	}
 	
 	/**
-	 * Makes a tile, then add unblocked directions to the tile.
+	 * Makes a tile, then add (random) unblocked directions to the tile.
 	 * The number of unblocked directions is given by numBranches.
 	 * @param numBranches
 	 * @return
@@ -81,9 +94,8 @@ public class GameMaster {
 		}
 		return tile;
 	}
-	//Make a shuffle board method.
 	
-	//Do we have a rotate tile method?
+	//Make a shuffle board method.
 	
 	public static void main(String[] args) {
 		GameMaster.gameStartUp();
