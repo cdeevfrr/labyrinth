@@ -16,7 +16,7 @@ public class BoardTester {
 	Tile t2;
 	Tile t3;
 	Tile t4;
-	Tile t5; 	
+	Tile t5;
 
 	@Before
 	public void setUp() throws Exception {
@@ -34,11 +34,8 @@ public class BoardTester {
 		t3 = new Tile(0,1);
 		t4 = new Tile(2,1);
 		t5 = new Tile(0,0);
-		b.tiles.put(t1.location(), t1);
-		b.tiles.put(t2.location(), t2);
-		b.tiles.put(t3.location(), t3);
-		b.tiles.put(t4.location(), t4);
-		b.tiles.put(t5.location(), t5);
+		Tile[] tiles = {t1,t2,t3,t4,t5};
+		b.addTiles(tiles);
 	}
 
 	@After

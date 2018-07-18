@@ -2,16 +2,17 @@ package Physics;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
 
 import javax.swing.event.ChangeListener;
 
 
 public class Board {
 	// The list of tiles in this board. Tiles store their x,y locations.
-	HashMap<Point, Tile> tiles;
+	private HashMap<Point, Tile> tiles;
 	// listeners listen for changes that need to happen in the interface.
-	ArrayList<ChangeListener> listeners;
-	ArrayList<Player> players;
+	private ArrayList<ChangeListener> listeners;
+	private ArrayList<Player> players;
 	
 	public Board(){
 		tiles = new HashMap<Point, Tile>();
@@ -78,6 +79,16 @@ public class Board {
 		return tiles.get(p);
 	}
 	
+	public void addTile(Tile t) {
+		this.tiles.put(t.location(),t);
+	};
+	
+	public void addTiles(Tile[] tiles) {
+		for(Tile tile : tiles) {
+			this.addTile(tile);
+		}
+	}
+	
 	/**
 	 * Push the tile t in the direction specified, where 
 	 * direction numbers come from the the Directions class.
@@ -96,24 +107,20 @@ public class Board {
 	 * back and move this tile.
 	 * @param t
 	 * @param direction
-	 * @return
+	 * @return Returns the last tile moved.
 	 */
 	public Tile push(Tile t, int direction){
 		Point newCoords = Directions.move(t.location(),direction);
 		Tile overridden = tileAt(newCoords);
+		Tile result = t;
 		if (overridden != null){
 			// Have to push the other tile before setting this tile's location,
 			// otherwise tile_at may be invalid for some time.
-			Tile result =  push(overridden, direction);
-			this.changeTileLocation(t, newCoords);
-			alertListeners();
-			return result;
+			result =  push(overridden, direction);
 		}
-		else{
-			this.changeTileLocation(t, newCoords);
-			alertListeners();
-			return t;
-		}
+		this.changeTileLocation(t, newCoords);
+		alertListeners();
+		return result;
 	}
 	
 	/**
@@ -128,22 +135,22 @@ public class Board {
 	 */
 	public Tile insert(Tile t, Point location, int direction){
 		Tile overridden = tileAt(location);
+		Tile result = t;
 		if (overridden != null){
-			Tile result = push(overridden, direction);
-			this.changeTileLocation(t, location);
-			return result;
+			result = push(overridden, direction);
 		}
-		else{
-			this.changeTileLocation(t, location);
-			return t;
-		}
+		this.changeTileLocation(t, location);
+		return result;
 	}
 	
 	public void changeTileLocation(Tile t, Point newLocation) {
 		Point oldLocation = t.location();
 		t.setLocation(newLocation);
-		this.getTiles().put(newLocation, t);
-		this.getTiles().remove(oldLocation,t);
+		if(this.tileAt(newLocation)!=null) {
+			throw new RuntimeException("Can't move a tile that way, a tile already exists there:" + this.tileAt(newLocation));
+		}
+		this.tiles.remove(oldLocation,t);
+		this.tiles.put(newLocation, t);
 	}
 	
 	public void setTiles(HashMap<Point,Tile> t) {
@@ -152,12 +159,16 @@ public class Board {
 	
 	public void setTiles(ArrayList<Tile> tiles) {
 		for(Tile tile : tiles) {
-			this.getTiles().put(tile.location(), tile);
+			this.tiles.put(tile.location(), tile);
 		}
 	}
 	
-	public HashMap<Point,Tile> getTiles() {
-		return this.tiles;
+	public Set<Point> getTileLocations() {
+		return this.tiles.keySet();
+	}
+	
+	public ArrayList<Player> getPlayers() {
+		return this.players;
 	}
 	
 	public void addPlayer(Player p) {
@@ -184,11 +195,6 @@ public class Board {
 	public boolean checkMove(Player p, int direction){
 		Point newLocation = Directions.move(p.location(),direction);
 		Tile fromTile = p.getTile();
-		//This probably is no longer necessary (b/c players must be on a tile):
-		if (fromTile == null) { 
-			return true;
-		}
-		//
 		Tile toTile = tileAt(newLocation);
 		if(toTile == null)return false;
 		if(!fromTile.isUnblocked(direction)) return false;
