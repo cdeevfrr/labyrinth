@@ -40,6 +40,19 @@ public class Tile {
 		this.y = p.y;
 	 }
 	
+	 /**
+	  * Rotates the unblocked directions of the tile.
+	  */
+	 public void rotate() {
+		 boolean[] oldUD = this.unblocked_directions;
+		 int arrayLength = oldUD.length;
+		 boolean[] newUD = new boolean[arrayLength];
+		 for(int i=0; i<arrayLength; i++) {
+			 newUD[(i+1) % arrayLength] = oldUD[i];
+		 }
+		 this.unblocked_directions = newUD;
+	 }
+	
 	
 	public boolean isUnblocked(String direction){
 		return isUnblocked(Directions.direction(direction));
