@@ -39,6 +39,8 @@ public class BoardDisplayer extends JPanel implements ChangeListener, KeyListene
 		this.modes = new ArrayList<ActionMode>();
 		this.addMode(new CursorMode());
 		this.addMode(new PushTileMode(this.board));
+		//add MovePlayerMode for every player!!
+		//Also add MovePlayerMode every time a player is added...
 		this.addMode(new MovePlayerMode(board, board.getFirstPlayer()));
 		this.currentActionMode = 0;
 	}

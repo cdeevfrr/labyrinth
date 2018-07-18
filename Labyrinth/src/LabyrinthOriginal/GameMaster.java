@@ -14,20 +14,36 @@ import javax.swing.JFrame;
 
 public class GameMaster {
 
-	public static final Integer[] DISTRIBUTION = {0,0,5,2,0}; //0,1,2,3,4
-	public static final int TILESIDES = DISTRIBUTION.length - 1;
+	public Integer[] distribution;
+	private BoardDisplayer boardDisplayer;
+	
+	GameMaster() {
+		this.distribution = null;
+		this.boardDisplayer = null; 
+		//Normally good to make a board before you make a board displayer.
+	}
+	
+	public int tilesides() {
+		return this.distribution.length - 1;
+	}
 	
 	/**
-	 * Creates the board, a player, and the GUI window.
+	 * Creates the board, player(s), and the GUI window.
+	 * Might want to make a default gameStartUp with default distribution 
+	 * and board size...
 	 */
-	public static void gameStartUp() {
-		Board b = newBoard(5,5);
-		
-		b.addPlayer(new Player(b.tileAt(0,0),Color.green));
-		b.addPlayer(new Player(b.tileAt(4,4),Color.blue));
+	public void gameStartUp(Integer[] distribution, int tilesWide, int tilesTall) {
+		this.distribution = distribution;
+		Board b = newBoard(tilesWide, tilesTall);
+		b.addPlayer(new Player(b.tileAt(0,0),Color.green)); //bl
+		b.addPlayer(new Player(b.tileAt(tilesWide-1,0),Color.red)); //br
+		b.addPlayer(new Player(b.tileAt(0,tilesWide-1),Color.yellow)); //tl
+		b.addPlayer(new Player(b.tileAt(tilesWide-1,tilesTall-1),Color.blue)); //tr
+		this.boardDisplayer = new BoardDisplayer(b);
+		//Add playerModes to the board displayer for every player on the board
 		
 		JFrame f = new JFrame();
-		f.setContentPane(new BoardDisplayer(b));
+		f.setContentPane(this.boardDisplayer);
 		f.pack();
 		//center the window
 		f.setLocationRelativeTo(null);
@@ -39,21 +55,21 @@ public class GameMaster {
 	
 	/**
 	 * Makes a new board given height and width parameters. 
-	 * DISTRIBUTION and (indirectly) TILESIDES also influence 
+	 * distribution and (indirectly) tilesides also influence 
 	 * the board construction.
 	 * numBranches := The number of unblocked directions.
 	 * @param tilesWide
 	 * @param tilesTall
 	 * @return
 	 */
-	public static Board newBoard(int tilesWide, int tilesTall) {
+	public Board newBoard(int tilesWide, int tilesTall) {
 		int totalTiles = tilesWide * tilesTall;
 		Board board = new Board();
 		ArrayList<Tile> tiles = new ArrayList<Tile>();
 		//Filling the ArrayList in with tiles:
 		while(tiles.size() < totalTiles) {
-			for(int numBranches = 0; numBranches < DISTRIBUTION.length; numBranches++){
-				for(int repeat = 0; repeat < DISTRIBUTION[numBranches]; repeat++) {
+			for(int numBranches = 0; numBranches < this.distribution.length; numBranches++){
+				for(int repeat = 0; repeat < this.distribution[numBranches]; repeat++) {
 					Tile tile = makeTile(numBranches);
 					tiles.add(tile);
 				}
@@ -82,10 +98,10 @@ public class GameMaster {
 	 * @param numBranches
 	 * @return
 	 */
-	public static Tile makeTile(int numBranches) {
+	public Tile makeTile(int numBranches) {
 		Tile tile = new Tile(0,0);
-		ArrayList<Integer> order = new ArrayList<Integer>(TILESIDES);
-		for(int i=0; i < TILESIDES; i++) {
+		ArrayList<Integer> order = new ArrayList<Integer>(this.tilesides());
+		for(int i=0; i < this.tilesides(); i++) {
 			order.add(i);
 		}
 		Collections.shuffle(order);
@@ -98,6 +114,8 @@ public class GameMaster {
 	//Make a shuffle board method.
 	
 	public static void main(String[] args) {
-		GameMaster.gameStartUp();
+		GameMaster game = new GameMaster();
+		Integer[] distribution = {0,0,5,2,0};
+		game.gameStartUp(distribution,9,9);
 		}
 	}
