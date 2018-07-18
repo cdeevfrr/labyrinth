@@ -3,24 +3,25 @@ import java.awt.Color;
 import java.awt.Point;
 
 public class Player {
-	int x;
-	int y;
+	Tile tile;
 	Color color;
 	
 	
-	public Player(int x, int y, Color c){
-		this.x = x;
-		this.y = y;
+	public Player(Tile t, Color c){
+		this.tile = t;
 		this.color = c;
 	}
 	
-	public void moveTo(Point p){
-		this.x = p.x;
-		this.y = p.y;
+	public void moveTo(Tile t) {
+		this.tile = t;
+	}
+	
+	public Tile getTile() {
+		return this.tile;
 	}
 	
 	public Point location(){
-		return new Point(this.x, this.y);
+		return this.tile.location();
 	}
 
 }

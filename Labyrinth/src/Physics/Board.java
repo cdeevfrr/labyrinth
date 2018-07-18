@@ -1,58 +1,59 @@
 package Physics;
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Set;
 
 import javax.swing.event.ChangeListener;
 
 
 public class Board {
 	// The list of tiles in this board. Tiles store their x,y locations.
-	ArrayList<Tile> tiles;
+	private HashMap<Point, Tile> tiles;
 	// listeners listen for changes that need to happen in the interface.
-	ArrayList<ChangeListener> listeners;
-	ArrayList<Player> players;
+	private ArrayList<ChangeListener> listeners;
+	private ArrayList<Player> players;
 	
 	public Board(){
-		tiles = new ArrayList<Tile>();
+		tiles = new HashMap<Point, Tile>();
 		listeners = new ArrayList<ChangeListener>();
 		players = new ArrayList<Player>();
 	}
 	
-	//TODO make these maxes and mins actually calculate
 	// These will help the board be dynamically sized, 
 	// and it will automatically show the furthest two tiles that exist.
 	public int maxX(){
 		int currentMax = 0;
-		for (Tile t : tiles) {
-			if( t.x > currentMax) {
-				currentMax = t.x;
+		for (Point p : tiles.keySet()) {
+			if( p.x > currentMax) {
+				currentMax = p.x;
 			}
 		}
 		return currentMax;
 	}
 	public int maxY(){
 		int currentMax = 0;
-		for(Tile t : tiles) {
-			if(t.y > currentMax) {
-				currentMax = t.y;
+		for(Point p : tiles.keySet()) {
+			if(p.y > currentMax) {
+				currentMax = p.y;
 			}
 		}
 		return currentMax;
 	}
 	public int minX(){
 		int currentMin = 99999;
-		for (Tile t : tiles) {
-			if(t.x < currentMin) {
-				currentMin = t.x;
+		for (Point p : tiles.keySet()) {
+			if(p.x < currentMin) {
+				currentMin = p.x;
 			}
 		}
 		return currentMin;
 	}
 	public int minY(){
 		int currentMin = 99999;
-		for (Tile t : tiles) {
-			if(t.y < currentMin) {
-				currentMin = t.y;
+		for (Point p : tiles.keySet()) {
+			if(p.y < currentMin) {
+				currentMin = p.y;
 			}
 		}
 		return currentMin;
@@ -62,25 +63,30 @@ public class Board {
 		listeners.add(c);
 	}
 	
-	//TODO implement this to run better than O(n)
 	/**
 	 * Find the tile at x,y
-	 * Should eventually be implemented to be O(1) time.
-	 * May return null if no such tile exists.
+	 * Should run in O(1) time.
+	 * Returns null if no such tile exists.
 	 * @param x
 	 * @param y
 	 * @return
 	 */
 	public Tile tileAt(int x, int y){
-		for (Tile t : tiles){
-			if (t.x == x && t.y == y){
-				return t;
-			}
-		}
-		return null;
+		return tileAt(new Point(x,y));
 	}
+	
 	public Tile tileAt(Point p){
-		return tileAt(p.x, p.y);
+		return tiles.get(p);
+	}
+	
+	public void addTile(Tile t) {
+		this.tiles.put(t.location(),t);
+	};
+	
+	public void addTiles(Tile[] tiles) {
+		for(Tile tile : tiles) {
+			this.addTile(tile);
+		}
 	}
 	
 	/**
@@ -101,24 +107,20 @@ public class Board {
 	 * back and move this tile.
 	 * @param t
 	 * @param direction
-	 * @return
+	 * @return Returns the last tile moved.
 	 */
 	public Tile push(Tile t, int direction){
 		Point newCoords = Directions.move(t.location(),direction);
 		Tile overridden = tileAt(newCoords);
+		Tile result = t;
 		if (overridden != null){
 			// Have to push the other tile before setting this tile's location,
 			// otherwise tile_at may be invalid for some time.
-			Tile result =  push(overridden, direction);
-			t.setLocation(newCoords);
-			alertListeners();
-			return result;
+			result =  push(overridden, direction);
 		}
-		else{
-			t.setLocation(newCoords);
-			alertListeners();
-			return t;
-		}
+		this.changeTileLocation(t, newCoords);
+		alertListeners();
+		return result;
 	}
 	
 	/**
@@ -133,19 +135,40 @@ public class Board {
 	 */
 	public Tile insert(Tile t, Point location, int direction){
 		Tile overridden = tileAt(location);
+		Tile result = t;
 		if (overridden != null){
-			Tile result = push(overridden, direction);
-			t.setLocation(location);
-			return result;
+			result = push(overridden, direction);
 		}
-		else{
-			t.setLocation(location);
-			return t;
+		this.changeTileLocation(t, location);
+		return result;
+	}
+	
+	public void changeTileLocation(Tile t, Point newLocation) {
+		Point oldLocation = t.location();
+		t.setLocation(newLocation);
+		if(this.tileAt(newLocation)!=null) {
+			throw new RuntimeException("Can't move a tile that way, a tile already exists there:" + this.tileAt(newLocation));
+		}
+		this.tiles.remove(oldLocation,t);
+		this.tiles.put(newLocation, t);
+	}
+	
+	public void setTiles(HashMap<Point,Tile> t) {
+		this.tiles = t;
+	}
+	
+	public void setTiles(ArrayList<Tile> tiles) {
+		for(Tile tile : tiles) {
+			this.tiles.put(tile.location(), tile);
 		}
 	}
 	
-	public void setTiles(ArrayList<Tile> t) {
-		this.tiles = t;
+	public Set<Point> getTileLocations() {
+		return this.tiles.keySet();
+	}
+	
+	public ArrayList<Player> getPlayers() {
+		return this.players;
 	}
 	
 	public void addPlayer(Player p) {
@@ -162,7 +185,7 @@ public class Board {
 	public boolean movePlayer(Player p, int direction){
 		if (checkMove(p, direction)){
 			Point newLocation = Directions.move(p.location(),direction);
-			p.moveTo(newLocation);
+			p.moveTo(this.tileAt(newLocation));
 			alertListeners();
 			return true;
 		}
@@ -171,10 +194,7 @@ public class Board {
 	
 	public boolean checkMove(Player p, int direction){
 		Point newLocation = Directions.move(p.location(),direction);
-		Tile fromTile = tileAt(p.location());
-		if (fromTile == null){
-			return true;
-		}
+		Tile fromTile = p.getTile();
 		Tile toTile = tileAt(newLocation);
 		if(toTile == null)return false;
 		if(!fromTile.isUnblocked(direction)) return false;

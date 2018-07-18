@@ -6,6 +6,7 @@ import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.HashMap;
+import java.util.Set;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
@@ -56,7 +57,8 @@ public class BoardDisplayer extends JPanel implements ChangeListener, KeyListene
 	}
 	
 	private void paintTiles(Graphics g){
-		for (Tile t : board.tiles){
+		for (Point p : this.board.getTileLocations()){
+			Tile t = this.board.tileAt(p);
 			GuiTile gt = new GuiTile(t);
 			Point[] tlBr = screenBounds(t.x, t.y); //Screen boundaries of this tile
 			Point topLeft = tlBr[0];
@@ -66,9 +68,9 @@ public class BoardDisplayer extends JPanel implements ChangeListener, KeyListene
 	}
 	
 	public void paintCharacters(Graphics g){
-		for (Player c : board.players){
+		for (Player c : board.getPlayers()){
 			GuiPlayer gc = new GuiPlayer(c);
-			Point[] tlBr = screenBounds(c.x, c.y);
+			Point[] tlBr = screenBounds(c.location());
 			Point topLeft = tlBr[0];
 			Point bottomRight = tlBr[1];
 			gc.paint(g, topLeft, bottomRight);
@@ -124,6 +126,10 @@ public class BoardDisplayer extends JPanel implements ChangeListener, KeyListene
 		int top = screenHeight - (y - board.minY() + 1) * pixelsTall;
 		int bottom = top + pixelsTall;
 		return new Point[] {new Point(left, top), new Point(right, bottom)};
+	}
+	
+	public Point[] screenBounds(Point p) {
+		return screenBounds(p.x,p.y);
 	}
 	
 	public boolean isInBoard(Point p){
@@ -211,12 +217,10 @@ public class BoardDisplayer extends JPanel implements ChangeListener, KeyListene
 		tiles[3].setUnblocked("Up", true);
 		
 		for (Tile t : tiles){
-			b.tiles.add(t);
+			b.addTile(t);
 		}
 		
-		
-		
-		b.players.add(new Player(2,2,Color.green));
+		b.getPlayers().add(new Player(tiles[1],Color.green));
 		
 		JFrame f = new JFrame();
 		f.setContentPane(new BoardDisplayer(b));

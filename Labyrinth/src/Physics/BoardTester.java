@@ -20,25 +20,22 @@ public class BoardTester {
 
 	@Before
 	public void setUp() throws Exception {
-		/*  
-		 * Initial board state
+		  
+		 /* Initial board state
 		 * 
 		 *   T1  T2
 		 *   T3  T4
 		 *   T5
-		 *   
 		 */   
+		    
 		b = new Board();
 		t1 = new Tile(0,2);
 		t2 = new Tile(2,2);
 		t3 = new Tile(0,1);
 		t4 = new Tile(2,1);
 		t5 = new Tile(0,0);
-		b.tiles.add(t1);
-		b.tiles.add(t2);
-		b.tiles.add(t3);
-		b.tiles.add(t4);
-		b.tiles.add(t5);
+		Tile[] tiles = {t1,t2,t3,t4,t5};
+		b.addTiles(tiles);
 	}
 
 	@After
@@ -131,3 +128,4 @@ public class BoardTester {
 	}
 
 }
+

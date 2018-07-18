@@ -31,10 +31,15 @@ public class Tile {
 		return new Point(this.x, this.y);
 	}
 	
-	public void setLocation(Point p){
+	/* It would be nice if we could restrict this method to only be accessible to
+	 * Board method change tile location. Changing the location of a tile without 
+	 * changing its key in the tiles HashMap creates bugs!
+	 */
+	 public void setLocation(Point p){
 		this.x = p.x;
 		this.y = p.y;
-	}
+	 }
+	
 	
 	public boolean isUnblocked(String direction){
 		return isUnblocked(Directions.direction(direction));
