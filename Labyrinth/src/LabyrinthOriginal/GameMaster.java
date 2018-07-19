@@ -2,6 +2,7 @@ package LabyrinthOriginal;
 
 import Physics.Board;
 import Physics.BoardDisplayer;
+import Physics.MovePlayerMode;
 import Physics.Player;
 import Physics.Tile;
 
@@ -14,17 +15,15 @@ import javax.swing.JFrame;
 
 public class GameMaster {
 
-	public Integer[] distribution;
+	public Integer[] tileBranchDistribution;
 	private BoardDisplayer boardDisplayer;
 	
-	GameMaster() {
-		this.distribution = null;
-		this.boardDisplayer = null; 
-		//Normally good to make a board before you make a board displayer.
-	}
-	
+	/**
+	 * The number of sides per tile (eg, square has 4 sides).
+	 * @return
+	 */
 	public int tilesides() {
-		return this.distribution.length - 1;
+		return this.tileBranchDistribution.length - 1;
 	}
 	
 	/**
@@ -33,13 +32,16 @@ public class GameMaster {
 	 * and board size...
 	 */
 	public void gameStartUp(Integer[] distribution, int tilesWide, int tilesTall) {
-		this.distribution = distribution;
+		this.tileBranchDistribution = distribution;
 		Board b = newBoard(tilesWide, tilesTall);
-		b.addPlayer(new Player(b.tileAt(0,0),Color.green)); //bl
-		b.addPlayer(new Player(b.tileAt(tilesWide-1,0),Color.red)); //br
 		b.addPlayer(new Player(b.tileAt(0,tilesWide-1),Color.yellow)); //tl
 		b.addPlayer(new Player(b.tileAt(tilesWide-1,tilesTall-1),Color.blue)); //tr
+		b.addPlayer(new Player(b.tileAt(tilesWide-1,0),Color.red)); //br
+		b.addPlayer(new Player(b.tileAt(0,0),Color.green)); //bl
 		this.boardDisplayer = new BoardDisplayer(b);
+		for(Player player : b.getPlayers()) {
+			this.boardDisplayer.addMode(new MovePlayerMode(b,player));
+		}
 		//Add playerModes to the board displayer for every player on the board
 		
 		JFrame f = new JFrame();
@@ -68,8 +70,8 @@ public class GameMaster {
 		ArrayList<Tile> tiles = new ArrayList<Tile>();
 		//Filling the ArrayList in with tiles:
 		while(tiles.size() < totalTiles) {
-			for(int numBranches = 0; numBranches < this.distribution.length; numBranches++){
-				for(int repeat = 0; repeat < this.distribution[numBranches]; repeat++) {
+			for(int numBranches = 0; numBranches < this.tileBranchDistribution.length; numBranches++){
+				for(int repeat = 0; repeat < this.tileBranchDistribution[numBranches]; repeat++) {
 					Tile tile = makeTile(numBranches);
 					tiles.add(tile);
 				}
@@ -115,7 +117,7 @@ public class GameMaster {
 	
 	public static void main(String[] args) {
 		GameMaster game = new GameMaster();
-		Integer[] distribution = {0,0,5,2,0};
+		Integer[] distribution = {0,0,3,7,0};
 		game.gameStartUp(distribution,9,9);
 		}
 	}

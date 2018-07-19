@@ -39,8 +39,6 @@ public class BoardDisplayer extends JPanel implements ChangeListener, KeyListene
 		this.modes = new ArrayList<ActionMode>();
 		this.addMode(new CursorMode());
 		this.addMode(new PushTileMode(this.board));
-		//add MovePlayerMode for every player!!
-		//Also add MovePlayerMode every time a player is added...
 		this.addMode(new MovePlayerMode(board, board.getFirstPlayer()));
 		this.currentActionMode = 0;
 	}
@@ -62,7 +60,7 @@ public class BoardDisplayer extends JPanel implements ChangeListener, KeyListene
 		for (Point p : this.board.getTileLocations()){
 			Tile t = this.board.tileAt(p);
 			GuiTile gt = new GuiTile(t);
-			Point[] tlBr = screenBounds(t.x, t.y); //Screen boundaries of this tile
+			Point[] tlBr = screenBounds(t.location()); //Screen boundaries of this tile
 			Point topLeft = tlBr[0];
 			Point bottomRight = tlBr[1];
 			gt.paint(g,topLeft, bottomRight);
@@ -88,7 +86,7 @@ public class BoardDisplayer extends JPanel implements ChangeListener, KeyListene
 		// We add 1.0 to avoid integer division and to prevent issues if
 		// there are no modes yet.
 		float hue = (float)(currentActionMode / (modes.size() + 1.0)); 
-		g.setColor(Color.getHSBColor(hue, 0.5f, 0.5f));
+		g.setColor(Color.getHSBColor(hue, 0.5f, 1.0f));
 		g.drawRect(topLeft.x, topLeft.y, width, height);
 	}
 	
