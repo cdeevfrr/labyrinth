@@ -11,7 +11,6 @@ public class PushTileMode extends ActionMode {
 	 * Push the tile under the cursor in the direction specified by character c
 	 * Return true if successful, false if this push is invalid.
 	 * 
-	 * TODO implement this
 	 * @param e
 	 */
 	private boolean push(char c, Point cursorLocation){
