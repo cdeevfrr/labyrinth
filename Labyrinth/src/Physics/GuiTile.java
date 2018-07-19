@@ -18,14 +18,14 @@ public class GuiTile{
 	public void paint(Graphics g, Point topLeft, Point bottomRight){
 		int width = bottomRight.x - topLeft.x;
 		int height = bottomRight.y - topLeft.y;
-		g.setColor(Color.CYAN);
+		g.setColor(Color.DARK_GRAY);
 		g.fillRect(
 				topLeft.x,
 				topLeft.y, 
 				width,
 				height
 				);
-		g.setColor(Color.GRAY);
+		g.setColor(Color.WHITE);
 		//third-way points on x and y axes:
 		int oneThirdAlongWidth = topLeft.x + width/3;
 		int twoThirdsAlongWidth = topLeft.x + 2 * width/3;

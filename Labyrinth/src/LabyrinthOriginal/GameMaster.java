@@ -2,6 +2,7 @@ package LabyrinthOriginal;
 
 import Physics.Board;
 import Physics.BoardDisplayer;
+import Physics.MovePlayerMode;
 import Physics.Player;
 import Physics.Tile;
 
@@ -13,14 +14,38 @@ import java.util.Collections;
 import javax.swing.JFrame;
 
 public class GameMaster {
+
+	public Integer[] tileBranchDistribution;
+	private BoardDisplayer boardDisplayer;
 	
-	public static void gameStartUp() {
-		Board b = newBoard(5,5);
-		
-		b.addPlayer(new Player(b.tileAt(0,0),Color.green));
+	/**
+	 * The number of sides per tile (eg, square has 4 sides).
+	 * @return
+	 */
+	public int tilesides() {
+		return this.tileBranchDistribution.length - 1;
+	}
+	
+	/**
+	 * Creates the board, player(s), and the GUI window.
+	 * Might want to make a default gameStartUp with default distribution 
+	 * and board size...
+	 */
+	public void gameStartUp(Integer[] distribution, int tilesWide, int tilesTall) {
+		this.tileBranchDistribution = distribution;
+		Board b = newBoard(tilesWide, tilesTall);
+		b.addPlayer(new Player(b.tileAt(0,tilesWide-1),Color.yellow)); //tl
+		b.addPlayer(new Player(b.tileAt(tilesWide-1,tilesTall-1),Color.blue)); //tr
+		b.addPlayer(new Player(b.tileAt(tilesWide-1,0),Color.red)); //br
+		b.addPlayer(new Player(b.tileAt(0,0),Color.green)); //bl
+		this.boardDisplayer = new BoardDisplayer(b);
+		for(Player player : b.getPlayers()) {
+			this.boardDisplayer.addMode(new MovePlayerMode(b,player));
+		}
+		//Add playerModes to the board displayer for every player on the board
 		
 		JFrame f = new JFrame();
-		f.setContentPane(new BoardDisplayer(b));
+		f.setContentPane(this.boardDisplayer);
 		f.pack();
 		//center the window
 		f.setLocationRelativeTo(null);
@@ -30,17 +55,23 @@ public class GameMaster {
 	
 	}
 	
-	public static final Integer[] DISTRIBUTION = {0,0,5,2,0}; //0,1,2,3,4
-	public static final int TILESIDES = DISTRIBUTION.length - 1;
-	
-	public static Board newBoard(int tilesWide, int tilesTall) {
+	/**
+	 * Makes a new board given height and width parameters. 
+	 * distribution and (indirectly) tilesides also influence 
+	 * the board construction.
+	 * numBranches := The number of unblocked directions.
+	 * @param tilesWide
+	 * @param tilesTall
+	 * @return
+	 */
+	public Board newBoard(int tilesWide, int tilesTall) {
 		int totalTiles = tilesWide * tilesTall;
 		Board board = new Board();
 		ArrayList<Tile> tiles = new ArrayList<Tile>();
 		//Filling the ArrayList in with tiles:
 		while(tiles.size() < totalTiles) {
-			for(int numBranches = 0; numBranches < DISTRIBUTION.length; numBranches++){
-				for(int repeat = 0; repeat < DISTRIBUTION[numBranches]; repeat++) {
+			for(int numBranches = 0; numBranches < this.tileBranchDistribution.length; numBranches++){
+				for(int repeat = 0; repeat < this.tileBranchDistribution[numBranches]; repeat++) {
 					Tile tile = makeTile(numBranches);
 					tiles.add(tile);
 				}
@@ -64,15 +95,15 @@ public class GameMaster {
 	}
 	
 	/**
-	 * Makes a tile, then add unblocked directions to the tile.
+	 * Makes a tile, then add (random) unblocked directions to the tile.
 	 * The number of unblocked directions is given by numBranches.
 	 * @param numBranches
 	 * @return
 	 */
-	public static Tile makeTile(int numBranches) {
+	public Tile makeTile(int numBranches) {
 		Tile tile = new Tile(0,0);
-		ArrayList<Integer> order = new ArrayList<Integer>(TILESIDES);
-		for(int i=0; i < TILESIDES; i++) {
+		ArrayList<Integer> order = new ArrayList<Integer>(this.tilesides());
+		for(int i=0; i < this.tilesides(); i++) {
 			order.add(i);
 		}
 		Collections.shuffle(order);
@@ -81,11 +112,12 @@ public class GameMaster {
 		}
 		return tile;
 	}
+	
 	//Make a shuffle board method.
 	
-	//Do we have a rotate tile method?
-	
 	public static void main(String[] args) {
-		GameMaster.gameStartUp();
+		GameMaster game = new GameMaster();
+		Integer[] distribution = {0,0,3,7,0};
+		game.gameStartUp(distribution,9,9);
 		}
 	}
