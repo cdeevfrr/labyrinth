@@ -10,6 +10,10 @@ public class Cursor {
 		this.location = new Point(0,0);
 	}
 	
+	public Point getLocation() {
+		return this.location;
+	}
+	
 	public boolean move(int direction){
 		if (direction == -1) return false;
 		Point newLocation = Directions.move(location, direction);

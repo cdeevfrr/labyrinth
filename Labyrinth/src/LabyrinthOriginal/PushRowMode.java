@@ -8,25 +8,34 @@ package LabyrinthOriginal;
 import Physics.ActionMode;
 import Physics.Board;
 import Physics.Cursor;
+import Physics.Directions;
+import Physics.Tile;
 
 public class PushRowMode extends ActionMode {
 	Board board;
-	int tilesWide;
-	int tilesTall;
+	Tile extraTile;
+	//int tilesWide;
+	//int tilesTall;
 	
-	@Override
-	public boolean keyPressed(char c, Cursor cursor) {
-		// TODO Auto-generated method stub
-		return false;
+	public PushRowMode(Board b) {
+		this.board = b;
 	}
 	
-/**
- * Fields: We'll need a board, of course. But maybe it would be better to have 
- * a gamemaster instead?? Because we will need a board size, and that is given by
- * the gamemaster, not the board....
- * The board displayer is what cycles thru the modes.
- * Err... maybe the board size can just be a field? and then when in 
- * game master, we can initialize it with the correct dimensions.
- */
+	/**
+	 * Pushes the row or column that the cursor is in in the direction 
+	 * specified by the character c, by inserting the extra tile. 
+	 * Takes the last tile off the board and stores it as the extra tile.
+	 * TODO: Remove the extra tile from the board.
+	 * @param c
+	 * @param cursor
+	 * return
+	 */
+	@Override
+	public boolean keyPressed(char c, Cursor cursor) {
+		int directionPushed = this.getDirection(c);
+		this.extraTile = this.board.insert(this.extraTile, this.board.getFurthestTile(Directions.opposite(directionPushed), cursor.getLocation()),
+				directionPushed);
+		return false;
+	}
 	
 }

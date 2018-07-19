@@ -143,6 +143,21 @@ public class Board {
 		return result;
 	}
 	
+	/**
+	 * Finds the furthest tile from the cursorLocation in the direction insertDirection.
+	 * @param insertDirection
+	 * @param cursorLocation
+	 * @return
+	 */
+	public Point getFurthestTile(int insertDirection, Point cursorLocation) {
+		Point newCoords = Directions.move(cursorLocation,insertDirection);
+		Tile nextTile = this.tileAt(newCoords);
+		if(nextTile != null) {
+			return this.getFurthestTile(insertDirection, newCoords);
+		}
+		return cursorLocation;
+	}
+	
 	public void changeTileLocation(Tile t, Point newLocation) {
 		Point oldLocation = t.location();
 		t.setLocation(newLocation);
