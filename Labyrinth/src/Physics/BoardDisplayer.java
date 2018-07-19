@@ -14,6 +14,8 @@ import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import LabyrinthOriginal.PushRowMode;
+
 
 public class BoardDisplayer extends JPanel implements ChangeListener, KeyListener{
 	private static final long serialVersionUID = 1L;
@@ -38,7 +40,7 @@ public class BoardDisplayer extends JPanel implements ChangeListener, KeyListene
 		
 		this.modes = new ArrayList<ActionMode>();
 		this.addMode(new CursorMode());
-		this.addMode(new PushTileMode(this.board));
+		this.addMode(new PushRowMode(this.board));
 		this.addMode(new MovePlayerMode(board, board.getFirstPlayer()));
 		this.currentActionMode = 0;
 	}
