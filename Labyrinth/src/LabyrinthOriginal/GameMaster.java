@@ -16,7 +16,7 @@ import javax.swing.JFrame;
 public class GameMaster {
 
 	public Integer[] tileBranchDistribution;
-	private BoardDisplayer boardDisplayer;
+	private MainPanel mainPanel;
 	
 	/**
 	 * The number of sides per tile (eg, square has 4 sides).
@@ -33,19 +33,21 @@ public class GameMaster {
 	 */
 	public void gameStartUp(Integer[] distribution, int tilesWide, int tilesTall) {
 		this.tileBranchDistribution = distribution;
+		
+		//set-up main panel (and board displayer and board):
 		Board b = newBoard(tilesWide, tilesTall);
 		b.addPlayer(new Player(b.tileAt(0,tilesWide-1),Color.yellow)); //tl
 		b.addPlayer(new Player(b.tileAt(tilesWide-1,tilesTall-1),Color.blue)); //tr
 		b.addPlayer(new Player(b.tileAt(tilesWide-1,0),Color.red)); //br
 		b.addPlayer(new Player(b.tileAt(0,0),Color.green)); //bl
-		this.boardDisplayer = new BoardDisplayer(b);
-		for(Player player : b.getPlayers()) {
-			this.boardDisplayer.addMode(new MovePlayerMode(b,player));
-		}
+		this.mainPanel = new MainPanel(new BoardDisplayer(b));
 		//Add playerModes to the board displayer for every player on the board
+		for(Player player : b.getPlayers()) {
+			this.mainPanel.getBoardDisplayer().addMode(new MovePlayerMode(b,player));
+		}
 		
 		JFrame f = new JFrame();
-		f.setContentPane(this.boardDisplayer);
+		f.setContentPane(this.mainPanel);
 		f.pack();
 		//center the window
 		f.setLocationRelativeTo(null);
