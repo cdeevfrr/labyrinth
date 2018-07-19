@@ -89,6 +89,10 @@ public class Board {
 		}
 	}
 	
+	public void removeTileAt(Point p) {
+		this.tiles.remove(p);
+	}
+	
 	/**
 	 * Push the tile t in the direction specified, where 
 	 * direction numbers come from the the Directions class.

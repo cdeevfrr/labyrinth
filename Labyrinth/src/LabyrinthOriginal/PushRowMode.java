@@ -25,7 +25,7 @@ public class PushRowMode extends ActionMode {
 	 * Pushes the row or column that the cursor is in in the direction 
 	 * specified by the character c, by inserting the extra tile. 
 	 * Takes the last tile off the board and stores it as the extra tile.
-	 * TODO: Remove the extra tile from the board.
+	 * TODO: Return value.
 	 * @param c
 	 * @param cursor
 	 * return
@@ -33,8 +33,13 @@ public class PushRowMode extends ActionMode {
 	@Override
 	public boolean keyPressed(char c, Cursor cursor) {
 		int directionPushed = this.getDirection(c);
-		this.extraTile = this.board.insert(this.extraTile, this.board.getFurthestTile(Directions.opposite(directionPushed), cursor.getLocation()),
+		this.extraTile = this.board.insert(this.extraTile,
+				this.board.getFurthestTile(Directions.opposite(directionPushed), cursor.getLocation()),
 				directionPushed);
+		this.board.removeTileAt(this.extraTile.location()); 
+		/*^^This is not ideal...Maybe we can store the location of the extraTile in 
+		 * addition to the tile itself. Note that board.insert() returns a tile, not a location.
+		 */
 		return false;
 	}
 	
