@@ -6,17 +6,39 @@ import Physics.MovePlayerMode;
 import Physics.Player;
 import Physics.Tile;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Collections;
 
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 
+/**
+ * An instance of the GameMaster is one game. It also has responsibility to show the game to the user
+ * and let the user interact with it.
+ * A game has settings (difficulty, tile distribution, etc), and a board (which keeps track of most
+ * of the info about the current state of the game).
+ * and needs a boardDisplayer, main panel, etc to interact with the user.
+ * @author lindsayeddy
+ *
+ */
 public class GameMaster {
 
 	public Integer[] tileBranchDistribution;
-	private MainPanel mainPanel;
+	private BoardDisplayer boardDisplayer;
+	private Board board;
+	private JPanel mainPanel;
+	
+	public GameMaster(Integer[] distribution, int tilesWide, int tilesTall) {
+		this.tileBranchDistribution = distribution;
+		this.board = newBoard(tilesWide, tilesTall);
+		//for now:
+		this.board.addPlayer(new Player(this.board.tileAt(0,0),Color.yellow));
+		this.boardDisplayer = new BoardDisplayer(this.board);
+		this.mainPanel = new JPanel();
+	}
 	
 	/**
 	 * The number of sides per tile (eg, square has 4 sides).
@@ -26,24 +48,12 @@ public class GameMaster {
 		return this.tileBranchDistribution.length - 1;
 	}
 	
-	/**
-	 * Creates the board, player(s), and the GUI window.
-	 * Might want to make a default gameStartUp with default distribution 
-	 * and board size...
-	 */
-	public void gameStartUp(Integer[] distribution, int tilesWide, int tilesTall) {
-		this.tileBranchDistribution = distribution;
-		
-		//set-up main panel (and board displayer and board):
-		Board b = newBoard(tilesWide, tilesTall);
-		b.addPlayer(new Player(b.tileAt(0,tilesWide-1),Color.yellow)); //tl
-		b.addPlayer(new Player(b.tileAt(tilesWide-1,tilesTall-1),Color.blue)); //tr
-		b.addPlayer(new Player(b.tileAt(tilesWide-1,0),Color.red)); //br
-		b.addPlayer(new Player(b.tileAt(0,0),Color.green)); //bl
-		this.mainPanel = new MainPanel(new BoardDisplayer(b));
+	public void gameStartUp() {
+		this.mainPanel.setLayout(new BorderLayout());
+		this.mainPanel.add(this.boardDisplayer, BorderLayout.CENTER);
 		//Add playerModes to the board displayer for every player on the board
-		for(Player player : b.getPlayers()) {
-			this.mainPanel.getBoardDisplayer().addMode(new MovePlayerMode(b,player));
+		for(Player player : board.getPlayers()) {
+			this.boardDisplayer.addMode(new MovePlayerMode(board,player));
 		}
 		
 		JFrame f = new JFrame();
@@ -118,8 +128,8 @@ public class GameMaster {
 	//Make a shuffle board method.
 	
 	public static void main(String[] args) {
-		GameMaster game = new GameMaster();
 		Integer[] distribution = {0,0,3,7,0};
-		game.gameStartUp(distribution,9,9);
+		GameMaster game = new GameMaster(distribution,9,9);
+		game.gameStartUp();
 		}
 	}
