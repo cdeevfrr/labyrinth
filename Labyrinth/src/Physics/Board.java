@@ -168,7 +168,7 @@ public class Board {
 		if(nextTile == null) {
 			result = p;
 		} else {
-		result = this.getFurthestTile(direction, newCoords);
+			result = this.getFurthestTile(direction, newCoords);
 		}
 		return result;
 	}

@@ -2,7 +2,7 @@ package LabyrinthOriginal;
 
 import Physics.Board;
 import Physics.BoardDisplayer;
-import Physics.MovePlayerMode;
+//import Physics.MovePlayerMode;
 import Physics.Player;
 import Physics.Tile;
 
@@ -35,13 +35,13 @@ public class GameMaster {
 		this.tileBranchDistribution = distribution;
 		Board b = newBoard(tilesWide, tilesTall);
 		b.addPlayer(new Player(b.tileAt(0,tilesWide-1),Color.yellow)); //tl
-		b.addPlayer(new Player(b.tileAt(tilesWide-1,tilesTall-1),Color.blue)); //tr
-		b.addPlayer(new Player(b.tileAt(tilesWide-1,0),Color.red)); //br
-		b.addPlayer(new Player(b.tileAt(0,0),Color.green)); //bl
+		//b.addPlayer(new Player(b.tileAt(tilesWide-1,tilesTall-1),Color.blue)); //tr
+		//b.addPlayer(new Player(b.tileAt(tilesWide-1,0),Color.red)); //br
+		//b.addPlayer(new Player(b.tileAt(0,0),Color.green)); //bl
 		this.boardDisplayer = new BoardDisplayer(b);
-		for(Player player : b.getPlayers()) {
-			this.boardDisplayer.addMode(new MovePlayerMode(b,player));
-		}
+		//for(Player player : b.getPlayers()) {
+		//	this.boardDisplayer.addMode(new MovePlayerMode(b,player));
+		//}
 		//Add playerModes to the board displayer for every player on the board
 		
 		JFrame f = new JFrame();
