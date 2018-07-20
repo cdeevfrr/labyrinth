@@ -5,14 +5,17 @@ import java.util.ArrayList;
 
 public class Tile {
 	boolean[] unblocked_directions;
+	static int lastID;
 	
 	// These are the x and y locations in the board, not on screen.
 	int x;
 	int y;
+	int id;
 	
 	public Tile(int x, int y, ArrayList<String> unblocked_directions){
 		this.x = x;
 		this.y = y;
+		this.id = lastID ++;
 		this.unblocked_directions = new boolean[] {false, false, false, false};
 		for(String d : unblocked_directions) {
 			this.unblocked_directions[Directions.direction(d)] = true;

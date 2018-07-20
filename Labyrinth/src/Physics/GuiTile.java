@@ -66,5 +66,7 @@ public class GuiTile{
 					bottomRight.x - twoThirdsAlongWidth,
 					twoThirdsAlongHeight - oneThirdAlongHeight);
 		}
+		g.setColor(Color.black);
+		g.drawString("" + tile.id, oneThirdAlongWidth, twoThirdsAlongHeight);
 	}
 }
