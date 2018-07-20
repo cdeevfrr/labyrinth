@@ -1,6 +1,5 @@
 package Physics;
 import java.awt.Point;
-import java.util.ArrayList;
 
 
 public class Tile {
@@ -10,22 +9,33 @@ public class Tile {
 	int x;
 	int y;
 	
-	public Tile(int x, int y, ArrayList<String> unblocked_directions){
+	public Tile(int x, int y){
 		this.x = x;
 		this.y = y;
 		this.unblocked_directions = new boolean[] {false, false, false, false};
-		for(String d : unblocked_directions) {
-			this.unblocked_directions[Directions.direction(d)] = true;
-		}
-	}
-	
-	public Tile(int x, int y){
-		this(x, y, new ArrayList<String>());
 	}
 	
 	public Tile (Point p){
 		this(p.x, p.y);
 	}
+	
+	/**
+	 * For now, generates a tile with 4 unblocked directions.
+	 * TODO: Make this function actually generate a random tile,
+	 * given some distribution of number of branches.
+	 * Will eventually have a parameter distribution.
+	 * @param p
+	 * @return
+	 */
+	public static Tile generateRandomTile(Point p){
+		Tile t = new Tile(p);
+		t.setUnblocked("Up", true);
+		t.setUnblocked("Right", true);
+		t.setUnblocked("Down", true);
+		t.setUnblocked("Left", true);
+		return t;
+	}
+	
 	
 	public Point location(){
 		return new Point(this.x, this.y);
