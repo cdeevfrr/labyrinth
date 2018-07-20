@@ -89,6 +89,18 @@ public class Board {
 		}
 	}
 	
+	public void removeTileAt(Point p) {
+		this.tiles.remove(p);
+	}
+	
+	/**
+	 * TODO: Try not to ask a tile for its location.
+	 * @param t
+	 */
+	public void removeTile(Tile t) {
+		removeTileAt(t.location());
+	}
+	
 	/**
 	 * Push the tile t in the direction specified, where 
 	 * direction numbers come from the the Directions class.
@@ -140,6 +152,24 @@ public class Board {
 			result = push(overridden, direction);
 		}
 		this.changeTileLocation(t, location);
+		return result;
+	}
+	
+	/**
+	 * Finds the furthest tile from the point p in the specified direction.
+	 * @param direction
+	 * @param p
+	 * @return
+	 */
+	public Point getFurthestTile(int direction, Point p) {
+		Point newCoords = Directions.move(p,direction);
+		Tile nextTile = this.tileAt(newCoords);
+		Point result;
+		if(nextTile == null) {
+			result = p;
+		} else {
+			result = this.getFurthestTile(direction, newCoords);
+		}
 		return result;
 	}
 	

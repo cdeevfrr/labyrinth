@@ -3,6 +3,7 @@ package LabyrinthOriginal;
 import Physics.Board;
 import Physics.BoardDisplayer;
 import Physics.MovePlayerMode;
+//import Physics.MovePlayerMode;
 import Physics.Player;
 import Physics.Tile;
 
@@ -49,6 +50,7 @@ public class GameMaster {
 		this.mainPanel = new JPanel();
 		this.mainPanel.setLayout(new BorderLayout());
 		this.mainPanel.add(this.boardDisplayer, BorderLayout.CENTER);
+
 		//Add playerModes to the board displayer for every player on the board
 		for(Player player : board.getPlayers()) {
 			this.boardDisplayer.addMode(new MovePlayerMode(board,player));
