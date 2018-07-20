@@ -30,15 +30,7 @@ public class GameMaster {
 	private BoardDisplayer boardDisplayer;
 	private Board board;
 	private JPanel mainPanel;
-	
-	public GameMaster(Integer[] distribution, int tilesWide, int tilesTall) {
-		this.tileBranchDistribution = distribution;
-		this.board = newBoard(tilesWide, tilesTall);
-		//for now:
-		this.board.addPlayer(new Player(this.board.tileAt(0,0),Color.yellow));
-		this.boardDisplayer = new BoardDisplayer(this.board);
-		this.mainPanel = new JPanel();
-	}
+
 	
 	/**
 	 * The number of sides per tile (eg, square has 4 sides).
@@ -48,7 +40,13 @@ public class GameMaster {
 		return this.tileBranchDistribution.length - 1;
 	}
 	
-	public void gameStartUp() {
+	public void gameStartUp(Integer[] distribution, int tilesWide, int tilesTall) {
+		this.tileBranchDistribution = distribution;
+		this.board = newBoard(tilesWide, tilesTall);
+		//for now:
+		this.board.addPlayer(new Player(this.board.tileAt(0,0),Color.yellow));
+		this.boardDisplayer = new BoardDisplayer(this.board);
+		this.mainPanel = new JPanel();
 		this.mainPanel.setLayout(new BorderLayout());
 		this.mainPanel.add(this.boardDisplayer, BorderLayout.CENTER);
 		//Add playerModes to the board displayer for every player on the board
@@ -129,7 +127,7 @@ public class GameMaster {
 	
 	public static void main(String[] args) {
 		Integer[] distribution = {0,0,3,7,0};
-		GameMaster game = new GameMaster(distribution,9,9);
-		game.gameStartUp();
+		GameMaster game = new GameMaster();
+		game.gameStartUp(distribution,9,9);
 		}
 	}
