@@ -5,8 +5,6 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.HashMap;
-import java.util.Set;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
