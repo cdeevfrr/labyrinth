@@ -185,7 +185,7 @@ public class BoardDisplayer extends JPanel implements ChangeListener, KeyListene
 		private static final long serialVersionUID = 1L;
 
 		public BoardDisplayerPanel(){
-			this.setPreferredSize(new Dimension(600,300));
+			this.setPreferredSize(new Dimension(600,600));
 		}
 		
 		public void paintComponent(Graphics g){
