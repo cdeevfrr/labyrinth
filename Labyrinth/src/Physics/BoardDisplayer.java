@@ -79,17 +79,17 @@ public class BoardDisplayer extends JPanel implements ChangeListener, KeyListene
 	 * @return
 	 */
 	private boolean modeSwitch(char c){
+		//All actual mode switching needs to go through the
+		//setMode function, which handles repainting and 
+		//updating other objects to the change.
 		boolean result = false;
 		if (c == MODESWITCH){
 			gotoNextActionMode();
 			result = true;
 		}
 		else if ('1' <= c && c <= '9'){
-			result = setMode(Integer.parseInt("" + c) - 1);
 			//The index of the mode associated with key '1' is 0.
-		}
-		if(result){
-			repaint();
+			result = setMode(Integer.parseInt("" + c) - 1);
 		}
 		return result;
 	}
@@ -104,6 +104,7 @@ public class BoardDisplayer extends JPanel implements ChangeListener, KeyListene
 		if(newActionMode >= 0 && newActionMode < modes.size()){
 			currentActionMode = newActionMode;
 			actionsPanel.setCurrentMode(currentActionMode);
+			this.repaint();
 			return true;
 		}
 		else{

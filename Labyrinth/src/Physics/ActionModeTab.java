@@ -74,7 +74,6 @@ public class ActionModeTab extends JPanel implements ActionListener{
 	}
 	
 	public void setCurrentMode(int current){
-		System.out.println(current);
 		this.currentMode = current;
 	}
 	/**
