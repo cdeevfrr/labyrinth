@@ -4,14 +4,17 @@ import java.awt.Point;
 
 public class Tile {
 	boolean[] unblocked_directions;
+	static int lastID;
 	
 	// These are the x and y locations in the board, not on screen.
 	int x;
 	int y;
+	int id;
 	
 	public Tile(int x, int y){
 		this.x = x;
 		this.y = y;
+		this.id = lastID ++;
 		this.unblocked_directions = new boolean[] {false, false, false, false};
 	}
 	
