@@ -40,4 +40,8 @@ public class PushRowMode extends ActionMode {
 		return true;
 	}
 	
+	@Override
+	public String getName(){
+		return "Push Row";
+	}
 }

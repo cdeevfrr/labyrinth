@@ -8,4 +8,9 @@ public class CursorMode extends ActionMode{
 		}
 		return cursor.move(direction);
 	}
+	
+	@Override
+	public String getName(){
+		return "Move cursor";
+	}
 }
