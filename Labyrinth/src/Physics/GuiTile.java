@@ -18,14 +18,14 @@ public class GuiTile{
 	public void paint(Graphics g, Point topLeft, Point bottomRight){
 		int width = bottomRight.x - topLeft.x;
 		int height = bottomRight.y - topLeft.y;
-		g.setColor(Color.DARK_GRAY);
+		g.setColor(Color.CYAN);
 		g.fillRect(
 				topLeft.x,
 				topLeft.y, 
 				width,
 				height
 				);
-		g.setColor(Color.WHITE);
+		g.setColor(Color.LIGHT_GRAY);
 		//third-way points on x and y axes:
 		int oneThirdAlongWidth = topLeft.x + width/3;
 		int twoThirdsAlongWidth = topLeft.x + 2 * width/3;
@@ -66,5 +66,7 @@ public class GuiTile{
 					bottomRight.x - twoThirdsAlongWidth,
 					twoThirdsAlongHeight - oneThirdAlongHeight);
 		}
+		g.setColor(Color.black);
+		g.drawString("" + tile.id, oneThirdAlongWidth, twoThirdsAlongHeight);
 	}
 }
