@@ -42,6 +42,7 @@ import java.util.Map;
  */
 public abstract class ActionMode {
 	Map<Character, Integer> binding;
+	String name;
 	
 	public static final Object[][] bindingsArray = new Object[][] {
 		{'w', Directions.direction("Up") },
@@ -86,5 +87,18 @@ public abstract class ActionMode {
 	
 	public int getDirection(char c){
 		return getBinding().getOrDefault(c, -1);
+	}
+	
+	public String toString(){
+		return this.getName();
+	}
+	
+	public String getName(){
+		if (name != null){
+			return name;
+		}
+		else{
+			return super.toString();
+		}
 	}
 }
