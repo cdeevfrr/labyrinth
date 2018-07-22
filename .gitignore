@@ -2,5 +2,5 @@
 .recommenders/
 /bin/
 
-.classpath/
-.project/
+.classpath
+.project
