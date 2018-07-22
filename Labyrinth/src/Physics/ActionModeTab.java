@@ -90,7 +90,7 @@ public class ActionModeTab extends JPanel implements ActionListener{
 	 * @param button
 	 */
 	private void highlight(JButton b){
-		b.setForeground(Color.GREEN);
+		b.setForeground(Color.GREEN.darker());
 	}
 
 	@Override
